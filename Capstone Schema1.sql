@@ -33,7 +33,7 @@ CREATE TABLE "itinerary_hotel" (
 
 CREATE TABLE "itinerary_rest" (
     "itinerary_id" PRIMARY  KEY,
-    "rest_id" PRIMARY  KEY,
+    "rest_id" PRIMARY  KEY
 );
 
 CREATE TABLE "favorties" (
