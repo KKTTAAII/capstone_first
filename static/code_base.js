@@ -71,7 +71,7 @@ function onPlaceChanged() {
 function search() {
   const search = {
     bounds: map.getBounds(),
-    types: ["restaurant"],
+    types: ["lodging"],
   };
 
   places.nearbySearch(search, (results, status, pagination) => {
