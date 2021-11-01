@@ -76,5 +76,5 @@ def show_user_page(user_id):
     return render_template("user_info.html", user=user)
 
 @app.route("/user/<int:user_id>/newiti")
-def show_map(user_id):
-    return
+def add_new_itinerary(user_id):
+    return render_template("new_iti.html")
