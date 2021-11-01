@@ -4,15 +4,21 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Conceirge</title>
+    <title>The Conceirge</title>
     <script src="https://unpkg.com/jquery"></script>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <link rel="stylesheet" type="text/css" href="/static/code_base.css" />
 </head>
 <body>
-    {% block content %}
-  {% endblock %}
+    <div class="container">
+      {% for category, message in get_flashed_messages(with_categories=True) %}
+      <div class="alert alert-{{ category }}">{{ message }}</div>
+      {% endfor %}
     
+      {% block content %}
+      {% endblock %}
+    </div>
+
     <script src="https://unpkg.com/axios/dist/axios.js"></script>
     <script src="/static/code_base.js"></script>
     <script

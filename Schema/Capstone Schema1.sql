@@ -10,11 +10,9 @@ CREATE TABLE "restaurant" (
 
 CREATE TABLE "user" (
     "id" PRIMARY KEY,
-    "first_name" TEXT   NOT NULL,
-    "last_name" TEXT   NOT NULL,
-    "phone_number" INT   NOT NULL,
-    "email" TEXT   NOT NULL,
-    "itinerary_count" INT  
+    "username" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
+    "email" TEXT   NOT NULL  
 );
 
 CREATE TABLE "itinerary" (

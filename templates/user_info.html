@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div>
+    <p>Username: {{user.username}}</p>
+    <p>Username: {{user.email}}</p>
+    <button><a href="/user/{{user.id}}/map">Create Itinerary</a></button>
+</div>
+
+{% endblock %}

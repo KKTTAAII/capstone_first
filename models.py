@@ -1,7 +1,8 @@
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy_utils import EmailType
+from flask_bcrypt import Bcrypt
 
 db = SQLAlchemy()
+bcrypt = Bcrypt()
 
 def connect_db(app):
     db.app = app
@@ -13,13 +14,26 @@ class User(db.Model):
     __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    first_name = db.Column(db.TEXT, nullable=False)
-    last_name = db.Column(db.TEXT, nullable=False)
+    username = db.Column(db.TEXT, nullable=False, unique=True)
     email = db.Column(db.TEXT, nullable=False)
-    phone_number = db.Column(db.TEXT, nullable=True)
+    password = db.Column(db.TEXT, nullable=False)
 
     def __repr__(self):
-        return f"<User {self.first_name} {self.last_name}, {self.email}>"
+        return f"<User {self.username}, {self.email}, {self.password}>"
+
+    @classmethod
+    def signup(cls, username, email, password):
+   
+        hashed_pwd = bcrypt.generate_password_hash(password).decode('UTF-8')
+
+        user = User(
+            username=username,
+            email=email,
+            password=hashed_pwd,
+        )
+
+        db.session.add(user)
+        return user
 
 class Itinerary(db.Model):
 
