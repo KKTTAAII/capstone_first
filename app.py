@@ -61,10 +61,11 @@ def signup():
                 email=form.email.data,
             )
             db.session.commit()
-            return redirect(f"/user/{user.id}")
         except IntegrityError:
             flash("Username already taken", 'danger')
             return render_template('signup.html', form=form)
+        do_login(user)
+        return redirect(f"/user/{user.id}")
 
     return render_template("signup.html", form=form)
 
@@ -74,6 +75,6 @@ def show_user_page(user_id):
     user = User.query.get_or_404(user_id)
     return render_template("user_info.html", user=user)
 
-@app.route("/user/<int:user_id>/map")
+@app.route("/user/<int:user_id>/newiti")
 def show_map(user_id):
     return
