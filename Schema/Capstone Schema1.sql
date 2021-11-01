@@ -1,12 +1,10 @@
 ﻿CREATE TABLE "hotel" (
     "id" PRIMARY KEY,
-    "name" TEXT  NOT NULL,
     "api_info" TEXT   NOT NULL
 );
 
 CREATE TABLE "restaurant" (
     "id" PRIMARY KEY,
-    "name" TEXT   NOT NULL,
     "api_info" TEXT   NOT NULL
 );
 
@@ -34,11 +32,6 @@ CREATE TABLE "itinerary_hotel" (
 CREATE TABLE "itinerary_rest" (
     "itinerary_id" PRIMARY  KEY,
     "rest_id" PRIMARY  KEY
-);
-
-CREATE TABLE "favorties" (
-    "id" PRIMARY  KEY,
-    "user_id" INT  NOT NULL
 );
 
 CREATE TABLE "fav_hotel" (
