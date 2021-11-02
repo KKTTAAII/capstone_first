@@ -1,9 +1,9 @@
 /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
 #map {
-  height: 100%;
-  margin-top: 40px;
-  width: 800px;
+  height: 650px;
+  margin-top: 50px;
+  width: 600px;
 }
 
 /* Optional: Makes the sample page fill the window. */

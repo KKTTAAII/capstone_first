@@ -15,6 +15,7 @@
       integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
       crossorigin="anonymous"
     />
+    <link rel="stylesheet" href="/static/app.css" type="text/css">
   </head>
   <body>
     <nav class="navbar navbar-expand">
@@ -39,7 +40,7 @@
       </div>
     </nav>
 
-    <div class="container">
+    <div class="container-fluid main">
       {% for category, message in get_flashed_messages(with_categories=True) %}
       <div class="alert alert-{{ category }}">{{ message }}</div>
       {% endfor %} {% block content %} {% endblock %}
@@ -47,5 +48,6 @@
 
     <script src="https://unpkg.com/axios/dist/axios.js"></script>
     <script src="/static/code_base.js"></script>
+    <script src="/static/app.js"></script>
   </body>
 </html>
