@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, redirect, render_template, flash, session, g
+from flask import Flask, redirect, render_template, flash, session, g, request
 from flask_debugtoolbar import DebugToolbarExtension
 from models import db, connect_db, User, Itinerary, Itinerary_hotel, Itinerary_restaurant, Hotel, Restaurant, Fav_Hotel, Fav_Rest
 from forms import SignupForm, LoginForm
@@ -110,6 +110,18 @@ def show_user_page(user_id):
     user = User.query.get_or_404(user_id)
     return render_template("user_info.html", user=user)
 
-@app.route("/user/<int:user_id>/newiti")
+@app.route("/user/<int:user_id>/newiti", methods=["GET", "POST"])
 def add_new_itinerary(user_id):
+    if request.method == "POST":
+        start_date = request.form.get("start_date")
+        end_date = request.form.get("end_date")
+        new_iti = Itinerary(user_id=user_id, start_date=start_date, end_date=end_date)
+        db.session.add(new_iti)
+        db.session.commit()
+        return redirect(f"/user/{user_id}/iti/{new_iti.id}")
     return render_template("user/new_iti.html")
+
+@app.route("/user/<int:user_id>/iti/<int:iti_id>")
+def show_itinerary(user_id, iti_id):
+    return redirect("/")
+

@@ -8,6 +8,8 @@ const hotelInputDiv = document.getElementById("hotel_div");
 const restInputDiv = document.getElementById("rest_div");
 const addHotelBtn = document.getElementById("addHotelBtn");
 const addRestBtn = document.getElementById("addRestBtn");
+const start_date = document.getElementsByName("start_date")[0];
+const end_date = document.getElementsByName("end_date")[0];
 
 addHotelBtn.addEventListener("click", function () {
   let newHotelInput = hotelInputDiv.insertAdjacentHTML("beforeend", hotelInput);
@@ -20,6 +22,11 @@ addRestBtn.addEventListener("click", function () {
   let restInputs = document.getElementsByName("restaurant");
   setId(restInputs, "restaurant");
 });
+
+start_date.addEventListener("change", function(){
+    if(start_date.value)
+        end_date.min = start_date.value;
+}, false)
 
 function setId(input, idname) {
   for (let i = 0; i < input.length; i++) {
