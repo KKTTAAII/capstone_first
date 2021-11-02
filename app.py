@@ -3,7 +3,7 @@ import os
 from flask import Flask, redirect, render_template, flash, session, g
 from flask_debugtoolbar import DebugToolbarExtension
 from models import db, connect_db, User, Itinerary, Itinerary_hotel, Itinerary_restaurant, Hotel, Restaurant, Fav_Hotel, Fav_Rest
-from forms import SignupForm
+from forms import SignupForm, LoginForm
 from sqlalchemy.exc import IntegrityError
 
 app = Flask(__name__)
@@ -23,7 +23,6 @@ db.create_all()
 
 @app.before_request
 def add_user_to_g():
-    """If we're logged in, add curr user to Flask global."""
 
     if CURR_USER_KEY in session:
         g.user = User.query.get(session[CURR_USER_KEY])
@@ -32,21 +31,27 @@ def add_user_to_g():
 
 
 def do_login(user):
-    """Log in user."""
 
     session[CURR_USER_KEY] = user.id
 
 
 def do_logout():
-    """Logout user."""
 
     if CURR_USER_KEY in session:
         del session[CURR_USER_KEY]
 
+############root route#############
+
 
 @app.route("/")
 def home_page():
-     return render_template("home.html")
+    if g.user:
+        return render_template("home-user.html")
+    else:
+        return render_template("home.html")
+
+
+###########signup, login, logout routes##############
 
 
 @app.route("/signup", methods=["GET", "POST"])
@@ -68,6 +73,37 @@ def signup():
         return redirect(f"/user/{user.id}")
 
     return render_template("signup.html", form=form)
+
+
+@app.route('/login', methods=["GET", "POST"])
+def login():
+    """Handle user login."""
+
+    form = LoginForm()
+
+    if form.validate_on_submit():
+        user = User.authenticate(form.username.data,
+                                 form.password.data)
+
+        if user:
+            do_login(user)
+            flash(f"Hello, {user.username}!", "success")
+            return redirect("/")
+
+        flash("Invalid credentials.", 'danger')
+
+    return render_template('login.html', form=form)
+
+
+@app.route("/logout")
+def logout():
+
+    session.pop(CURR_USER_KEY)
+    flash("You are logged out!", "info")
+    return redirect("/")
+
+
+################User routes##############
 
 
 @app.route("/user/<int:user_id>")

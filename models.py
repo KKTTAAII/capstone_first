@@ -35,6 +35,16 @@ class User(db.Model):
         db.session.add(user)
         return user
 
+    @classmethod
+    def authenticate(cls, username, password):
+        user = cls.query.filter_by(username=username).first()
+        is_auth = bcrypt.check_password_hash(user.password, password)
+        
+        if user and is_auth:
+                return user
+
+        return False
+
 class Itinerary(db.Model):
 
     __tablename__ = "itineraries"
