@@ -56,6 +56,9 @@ class Itinerary(db.Model):
     start_date = db.Column(db.Date)
     end_date = db.Column(db.Date)
 
+    iti_hotels = db.relationship('Itinerary_hotel', backref='itinerary')
+    iti_rests = db.relationship('Itinerary_restaurant', backref='itinerary')
+
     def __repr__(self):
         return f"<start date is {self.start_date}, end date is {self.end_date}>"
 
@@ -66,8 +69,10 @@ class Itinerary_hotel(db.Model):
     itinerary_id = db.Column(db.Integer, db.ForeignKey("itineraries.id", ondelete="cascade"), nullable=False, primary_key=True)
     hotel_id = db.Column(db.Integer, db.ForeignKey("hotels.id", ondelete="cascade"), nullable=False, primary_key=True)
 
+    hotels = db.relationship('Hotel', backref='iti_hotel')
+
     def __repr__(self):
-        return f"<Itinerary Hotel {self.itinerary_id} Song {self.hotel_id}>"
+        return f"<Itinerary Hotel iti_id : {self.itinerary_id}  hotel_id{self.hotel_id}>"
 
 class Itinerary_restaurant(db.Model):
 
@@ -76,8 +81,10 @@ class Itinerary_restaurant(db.Model):
     itinerary_id = db.Column(db.Integer, db.ForeignKey("itineraries.id", ondelete="cascade"), nullable=False, primary_key=True)
     rest_id = db.Column(db.Integer, db.ForeignKey("restaurants.id", ondelete="cascade"), nullable=False, primary_key=True)
 
+    rests = db.relationship('Restaurant', backref='iti_rest')
+
     def __repr__(self):
-        return f"<Itinerary Restaurants {self.itinerary_id} Song {self.rest_id}>"
+        return f"<Itinerary Restaurants iti_id{self.itinerary_id} rest_id{self.rest_id}>"
 
 class Hotel(db.Model):
     

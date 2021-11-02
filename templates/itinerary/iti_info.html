@@ -1,8 +1,31 @@
 {% extends 'base.html' %} {% block content %}
 <div id="iti-info">
-    <h1>{{g.user.username}}'s Trip!</h1>
-    <table class="table">
-        <thead></thead>
-    </table>
+  <h1>{{g.user.username}}'s Trip!</h1>
+  <table class="table">
+    <tr>
+      <th scope="col">Start Date</th>
+      <th scope="col">End Date</th>
+    </tr>
+    <tr>
+        <td>{{itinerary.start_date}}</td>
+        <td>{{itinerary.end_date}}</td>
+    </tr>
+    <tr>
+        <th scope="col">Hotels</th>
+    </tr>
+    {%for iti in itinerary.iti_hotels%}
+    <tr>
+        <td>{{iti.hotels.name}}</td>
+    </tr>
+    {%endfor%}
+    <tr>
+        <th scope="col">Resturants</th>
+    </tr>
+    {%for iti in itinerary.iti_rests%}
+    <tr>
+        <td>{{iti.rests.name}}</td>
+    </tr>
+    {%endfor%}
+  </table>
 </div>
 {% endblock %}
