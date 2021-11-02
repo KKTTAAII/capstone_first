@@ -72,13 +72,12 @@ def signup():
         do_login(user)
         return redirect(f"/user/{user.id}")
 
-    return render_template("signup.html", form=form)
+    return render_template("user/signup.html", form=form)
 
 
 @app.route('/login', methods=["GET", "POST"])
 def login():
-    """Handle user login."""
-
+    
     form = LoginForm()
 
     if form.validate_on_submit():
@@ -92,7 +91,7 @@ def login():
 
         flash("Invalid credentials.", 'danger')
 
-    return render_template('login.html', form=form)
+    return render_template('user/login.html', form=form)
 
 
 @app.route("/logout")
@@ -113,4 +112,4 @@ def show_user_page(user_id):
 
 @app.route("/user/<int:user_id>/newiti")
 def add_new_itinerary(user_id):
-    return render_template("new_iti.html")
+    return render_template("user/new_iti.html")
