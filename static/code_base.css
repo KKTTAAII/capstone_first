@@ -19,7 +19,7 @@ table {
   font-size: 12px;
 }
 
-.hotel-search {
+.search {
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
@@ -44,7 +44,7 @@ table {
   overflow-x: hidden;
 }
 
-#findhotels {
+#findplaces {
   font-size: 14px;
 }
 

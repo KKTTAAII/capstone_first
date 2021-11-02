@@ -49,7 +49,6 @@ function initMap() {
   autocomplete.addListener("place_changed", onPlaceChanged);
   // Add a DOM event listener to react when the user selects a country.
   document
-    .getElementById("country")
     .addEventListener("change", setAutocompleteCountry);
 }
 
@@ -69,9 +68,12 @@ function onPlaceChanged() {
 
 // Search for hotels in the selected city, within the viewport of the map.
 function search() {
+
+  let type = document.getElementById("type").value
+
   const search = {
     bounds: map.getBounds(),
-    types: ["lodging"],
+    types: [type],
   };
 
   places.nearbySearch(search, (results, status, pagination) => {
@@ -115,7 +117,7 @@ function clearMarkers() {
 // Set the country restriction based on user input.
 // Also center and zoom the map on the given country.
 function setAutocompleteCountry() {
-  const country = "U.S.A."
+  const country = "us"
 
   if (country == "all") {
     autocomplete.setComponentRestrictions({ country: [] });
@@ -123,8 +125,8 @@ function setAutocompleteCountry() {
     map.setZoom(2);
   } else {
     autocomplete.setComponentRestrictions({ country: country });
-    map.setCenter(countries[country].center);
-    map.setZoom(countries[country].zoom);
+    map.setCenter(countries["us"].center);
+    map.setZoom(countries["us"].zoom);
   }
 
   clearResults();
