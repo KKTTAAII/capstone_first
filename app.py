@@ -108,20 +108,45 @@ def logout():
 @app.route("/user/<int:user_id>")
 def show_user_page(user_id):
     user = User.query.get_or_404(user_id)
-    return render_template("user_info.html", user=user)
+    return render_template("user/user_info.html", user=user)
 
 @app.route("/user/<int:user_id>/newiti", methods=["GET", "POST"])
 def add_new_itinerary(user_id):
     if request.method == "POST":
         start_date = request.form.get("start_date")
         end_date = request.form.get("end_date")
+        hotels = request.form.getlist("hotel")
+        restaurants = request.form.getlist("restaurant")
+
         new_iti = Itinerary(user_id=user_id, start_date=start_date, end_date=end_date)
         db.session.add(new_iti)
         db.session.commit()
+
+        for hotel in hotels:
+            new_hotel = Hotel(name=hotel)
+            db.session.add(new_hotel)
+            db.session.commit()
+            new_hotel_iti = Itinerary_hotel(itinerary_id=new_iti.id, hotel_id=new_hotel.id)
+            db.session.add(new_hotel_iti)
+            db.session.commit()
+        for rest in restaurants:
+            new_rest = Restaurant(name=rest)
+            db.session.add(new_rest)
+            db.session.commit()
+            new_rest_iti = Itinerary_restaurant(itinerary_id=new_iti.id, rest_id=new_rest.id)
+            db.session.add(new_rest_iti)
+            db.session.commit()
         return redirect(f"/user/{user_id}/iti/{new_iti.id}")
-    return render_template("user/new_iti.html")
+
+    return render_template("itinerary/new_iti.html")
+
+
+###########Itinerary routes########
+
 
 @app.route("/user/<int:user_id>/iti/<int:iti_id>")
 def show_itinerary(user_id, iti_id):
+    itinerary = Itinerary.query.get_or_404(iti_id)
+
     return redirect("/")
 

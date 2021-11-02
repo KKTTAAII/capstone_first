@@ -18,6 +18,8 @@ class User(db.Model):
     email = db.Column(db.TEXT, nullable=False)
     password = db.Column(db.TEXT, nullable=False)
 
+    itineraries = db.relationship('Itinerary', backref='user')
+
     def __repr__(self):
         return f"<User {self.username}, {self.email}, {self.password}>"
 
@@ -50,7 +52,7 @@ class Itinerary(db.Model):
     __tablename__ = "itineraries"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="cascade"), nullable=False)
     start_date = db.Column(db.Date)
     end_date = db.Column(db.Date)
 
@@ -61,8 +63,8 @@ class Itinerary_hotel(db.Model):
 
     __tablename__ = "itinerary_hotels"
 
-    itinerary_id = db.Column(db.Integer, db.ForeignKey("itineraries.id"), nullable=False, primary_key=True)
-    hotel_id = db.Column(db.Integer, db.ForeignKey("hotels.id"), nullable=False, primary_key=True)
+    itinerary_id = db.Column(db.Integer, db.ForeignKey("itineraries.id", ondelete="cascade"), nullable=False, primary_key=True)
+    hotel_id = db.Column(db.Integer, db.ForeignKey("hotels.id", ondelete="cascade"), nullable=False, primary_key=True)
 
     def __repr__(self):
         return f"<Itinerary Hotel {self.itinerary_id} Song {self.hotel_id}>"
@@ -71,8 +73,8 @@ class Itinerary_restaurant(db.Model):
 
     __tablename__ = "itinerary_restaurants"
 
-    itinerary_id = db.Column(db.Integer, db.ForeignKey("itineraries.id"), nullable=False, primary_key=True)
-    rest_id = db.Column(db.Integer, db.ForeignKey("restaurants.id"), nullable=False, primary_key=True)
+    itinerary_id = db.Column(db.Integer, db.ForeignKey("itineraries.id", ondelete="cascade"), nullable=False, primary_key=True)
+    rest_id = db.Column(db.Integer, db.ForeignKey("restaurants.id", ondelete="cascade"), nullable=False, primary_key=True)
 
     def __repr__(self):
         return f"<Itinerary Restaurants {self.itinerary_id} Song {self.rest_id}>"
@@ -82,27 +84,27 @@ class Hotel(db.Model):
     __tablename__ = "hotels"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    api = db.Column(db.Text, nullable=False)
+    name = db.Column(db.Text, nullable=False)
 
     def __repr__(self):
-        return f"<Hotel api {self.api}>"
+        return f"<Hotel api {self.name}>"
 
 class Restaurant(db.Model):
     
     __tablename__ = "restaurants"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    api = db.Column(db.Text, nullable=False)
+    name = db.Column(db.Text, nullable=False)
 
     def __repr__(self):
-        return f"<Restaurant api {self.api}>"
+        return f"<Restaurant api {self.name}>"
 
 class Fav_Hotel(db.Model):
 
     __tablename__ = "fav_hotels"
 
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False, primary_key=True)
-    hotel_id = db.Column(db.Integer, db.ForeignKey("hotels.id"), nullable=False, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="cascade"), nullable=False, primary_key=True, )
+    hotel_id = db.Column(db.Integer, db.ForeignKey("hotels.id", ondelete="cascade"), nullable=False, primary_key=True)
 
     def __repr__(self):
         return f"<Fav Hotel {self.user_id}, {self.hotel_id}>"
@@ -111,8 +113,8 @@ class Fav_Rest(db.Model):
 
     __tablename__ = "fav_restaurants"
 
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False, primary_key=True)
-    rest_id = db.Column(db.Integer, db.ForeignKey("restaurants.id"), nullable=False, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="cascade"), nullable=False, primary_key=True )
+    rest_id = db.Column(db.Integer, db.ForeignKey("restaurants.id", ondelete="cascade"), nullable=False, primary_key=True)
 
     def __repr__(self):
         return f"<Fav Hotel {self.user_id}, {self.rest_id}>"
