@@ -4,6 +4,7 @@ let hotelInput = `<label for="hotel">Hotel</label>
                 <input type="text" name="hotel">`;
 let restInput = `<label for="restaurant">Restaurant</label> 
                 <input type="text" name="restaurant">`;
+                
 const hotelInputDiv = document.getElementById("hotel_div");
 const restInputDiv = document.getElementById("rest_div");
 const addHotelBtn = document.getElementById("addHotelBtn");

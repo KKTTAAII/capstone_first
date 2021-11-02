@@ -15,7 +15,7 @@ class User(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.TEXT, nullable=False, unique=True)
-    email = db.Column(db.TEXT, nullable=False)
+    email = db.Column(db.TEXT, nullable=False, unique=True)
     password = db.Column(db.TEXT, nullable=False)
 
     itineraries = db.relationship('Itinerary', backref='user')

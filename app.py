@@ -3,8 +3,9 @@ import os
 from flask import Flask, redirect, render_template, flash, session, g, request
 from flask_debugtoolbar import DebugToolbarExtension
 from models import db, connect_db, User, Itinerary, Itinerary_hotel, Itinerary_restaurant, Hotel, Restaurant, Fav_Hotel, Fav_Rest
-from forms import SignupForm, LoginForm
+from forms import SignupForm, LoginForm, validate_end_date, validate_start_date
 from sqlalchemy.exc import IntegrityError
+
 
 app = Flask(__name__)
 CURR_USER_KEY = "curr_user"
@@ -66,9 +67,15 @@ def signup():
                 email=form.email.data,
             )
             db.session.commit()
-        except IntegrityError:
-            flash("Username already taken", 'danger')
-            return render_template('signup.html', form=form)
+        except IntegrityError as e:
+            constraint = e.orig.diag.constraint_name
+            print(constraint)
+            if(constraint == "users_email_key"):
+                flash("Email already registered", 'danger')
+            if(constraint == "users_username_key"):
+                flash("Username already taken", 'danger')
+            db.session.rollback()
+            return render_template('user/signup.html', form=form)
         do_login(user)
         return redirect(f"/user/{user.id}")
 
@@ -113,6 +120,8 @@ def show_user_page(user_id):
 @app.route("/user/<int:user_id>/newiti", methods=["GET", "POST"])
 def add_new_itinerary(user_id):
     if request.method == "POST":
+        # validate_start_date
+        # validate_end_date
         start_date = request.form.get("start_date")
         end_date = request.form.get("end_date")
         hotels = request.form.getlist("hotel")
@@ -147,6 +156,6 @@ def add_new_itinerary(user_id):
 @app.route("/user/<int:user_id>/iti/<int:iti_id>")
 def show_itinerary(user_id, iti_id):
     itinerary = Itinerary.query.get_or_404(iti_id)
-
-    return redirect("/")
+    
+    return render_template("itinerary/iti_info.html", itinerary=itinerary)
 
