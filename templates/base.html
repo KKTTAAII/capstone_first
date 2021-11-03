@@ -30,6 +30,7 @@
           <li><a href="/signup">Sign up</a></li>
           <li><a href="/login">Log in</a></li>
           {% else %}
+          <li><a href="/user/{{ g.user.id }}">{{g.user.username}}</a></li>
           <li>
             <a href="/user/{{ g.user.id }}/iti">My Itineraries</a>
           </li>
