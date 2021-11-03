@@ -1,36 +1,66 @@
-////// handle "add more ..." buttons /////
+////// handle itinerary creation form /////
 
-let hotelInput = `<label for="hotel">Hotel</label> 
-                <input type="text" name="hotel">`;
-let restInput = `<label for="restaurant">Restaurant</label> 
-                <input type="text" name="restaurant">`;
-                
 const hotelInputDiv = document.getElementById("hotel_div");
 const restInputDiv = document.getElementById("rest_div");
 const addHotelBtn = document.getElementById("addHotelBtn");
 const addRestBtn = document.getElementById("addRestBtn");
-const start_date = document.getElementsByName("start_date")[0];
-const end_date = document.getElementsByName("end_date")[0];
+const startDate = document.getElementsByName("start_date")[0];
+const endDate = document.getElementsByName("end_date")[0];
+const results = document.getElementById("results");
+const newHotelSelect = document.createElement("select");
+const newRestSelect = document.createElement("select");
+const hotelNames = [];
+const restNames = [];
+
+startDate.addEventListener(
+  "change",
+  function () {
+    if (startDate.value) endDate.min = startDate.value;
+  },
+  false
+);
+
+results.addEventListener("DOMNodeInserted", function(){
+    let type = document.getElementById("type").value;
+    if(type === "lodging"){
+        getPlaceNames(hotelNames);
+        createOptions("hotel", hotelInputDiv, hotelNames, newHotelSelect);}
+    else if(type === "restaurant"){
+        getPlaceNames(restNames);
+        createOptions("restaurant", restInputDiv, restNames, newRestSelect);
+    }
+}, false);
 
 addHotelBtn.addEventListener("click", function () {
-  let newHotelInput = hotelInputDiv.insertAdjacentHTML("beforeend", hotelInput);
-  let hotelInputs = document.getElementsByName("hotel");
-  setId(hotelInputs, "hotel");
-});
-
+    const clone = newHotelSelect.cloneNode(true);
+    hotelInputDiv.appendChild(clone);
+  });
+  
 addRestBtn.addEventListener("click", function () {
-  let newRestInput = restInputDiv.insertAdjacentHTML("beforeend", restInput);
-  let restInputs = document.getElementsByName("restaurant");
-  setId(restInputs, "restaurant");
-});
+    const clone = newRestSelect.cloneNode(true);
+    restInputDiv.appendChild(clone);
+  });
 
-start_date.addEventListener("change", function(){
-    if(start_date.value)
-        end_date.min = start_date.value;
-}, false)
 
-function setId(input, idname) {
-  for (let i = 0; i < input.length; i++) {
-    input[i].setAttribute("id", idname + i);
+function getPlaceNames(placeNames) {
+  for (let i = 0; i < results.childNodes.length; i++) {
+    let name = results.childNodes[i].lastChild.innerText;
+    placeNames.push(name);
   }
+}
+
+function createOptions(placeType, inputDiv, names, selectTag) {
+  let option = document.createElement("option");
+  if (results.childNodes[0]) {
+    selectTag.name = placeType;
+    selectTag.id = placeType;
+
+    for (const name of names) {
+      option.value = name;
+      option.text = name;
+      selectTag.appendChild(option);
+    }
+    inputDiv.appendChild(selectTag);
+  }
+  return;
 }
