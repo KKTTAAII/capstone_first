@@ -30,6 +30,7 @@ def add_user_to_g():
     else:
         g.user = None
 
+    
 
 def do_login(user):
 
@@ -114,11 +115,19 @@ def logout():
 
 @app.route("/user/<int:user_id>")
 def show_user_page(user_id):
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
     user = User.query.get_or_404(user_id)
     return render_template("user/user_info.html", user=user)
 
 @app.route("/user/<int:user_id>/newiti", methods=["GET", "POST"])
 def add_new_itinerary(user_id):
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
     if request.method == "POST":
         # validate_start_date
         # validate_end_date
@@ -155,17 +164,29 @@ def add_new_itinerary(user_id):
 
 @app.route("/iti/<int:iti_id>")
 def show_itinerary(iti_id):
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
     itinerary = Itinerary.query.get_or_404(iti_id)
     return render_template("itinerary/iti_info.html", itinerary=itinerary)
 
 @app.route("/user/<int:user_id>/iti")
 def show_all_itineraries(user_id):
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
     user = User.query.get_or_404(user_id)
     all_iti = user.itineraries
     return render_template("itinerary/all_iti.html", all_iti=all_iti)
 
 @app.route("/iti/<int:iti_id>/delete", methods=["POST"])
 def delete_itinerary(iti_id):
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+        
     itinerary = Itinerary.query.get_or_404(iti_id)
     db.session.delete(itinerary)
     db.session.commit()
