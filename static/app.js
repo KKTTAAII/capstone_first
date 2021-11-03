@@ -23,9 +23,13 @@ startDate.addEventListener(
 results.addEventListener("DOMNodeInserted", function(){
     let type = document.getElementById("type").value;
     if(type === "lodging"){
+        addHotelBtn.style.display = "block"
+        hotelInputDiv.style.display = "block"
         getPlaceNames(hotelNames);
         createOptions("hotel", hotelInputDiv, hotelNames, newHotelSelect);}
     else if(type === "restaurant"){
+        addRestBtn.style.display = "block"
+        restInputDiv.style.display = "block"
         getPlaceNames(restNames);
         createOptions("restaurant", restInputDiv, restNames, newRestSelect);
     }
