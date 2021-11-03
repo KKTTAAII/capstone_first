@@ -159,3 +159,8 @@ def show_itinerary(user_id, iti_id):
     
     return render_template("itinerary/iti_info.html", itinerary=itinerary)
 
+@app.route("/user/<int:user_id>/itis")
+def show_all_itineraries(user_id):
+    user = User.query.get_or_404(user_id)
+    all_iti = user.itineraries
+    return render_template("itinerary/all_iti.html", all_iti=all_iti)

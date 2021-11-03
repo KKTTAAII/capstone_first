@@ -1,0 +1,8 @@
+{% extends 'base.html' %} {% block content %}
+<div>
+    <h1>Your Itineraries</h1>
+    {%for iti in all_iti%}
+    <p><a href="/user/{{g.user.id}}/iti/{{iti.id}}">{{iti.start_date}}-{{iti.end_date}}</a></p>
+    {%endfor%}
+</div>
+{% endblock %}
