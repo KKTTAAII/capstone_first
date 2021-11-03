@@ -145,7 +145,7 @@ def add_new_itinerary(user_id):
             new_rest_iti = Itinerary_restaurant(itinerary_id=new_iti.id, rest_id=new_rest.id)
             db.session.add(new_rest_iti)
             db.session.commit()
-        return redirect(f"/user/{user_id}/iti/{new_iti.id}")
+        return redirect(f"/iti/{new_iti.id}")
 
     return render_template("itinerary/new_iti.html")
 
@@ -153,14 +153,20 @@ def add_new_itinerary(user_id):
 ###########Itinerary routes########
 
 
-@app.route("/user/<int:user_id>/iti/<int:iti_id>")
-def show_itinerary(user_id, iti_id):
+@app.route("/iti/<int:iti_id>")
+def show_itinerary(iti_id):
     itinerary = Itinerary.query.get_or_404(iti_id)
-    
     return render_template("itinerary/iti_info.html", itinerary=itinerary)
 
-@app.route("/user/<int:user_id>/itis")
+@app.route("/user/<int:user_id>/iti")
 def show_all_itineraries(user_id):
     user = User.query.get_or_404(user_id)
     all_iti = user.itineraries
     return render_template("itinerary/all_iti.html", all_iti=all_iti)
+
+@app.route("/iti/<int:iti_id>/delete", methods=["POST"])
+def delete_itinerary(iti_id):
+    itinerary = Itinerary.query.get_or_404(iti_id)
+    db.session.delete(itinerary)
+    db.session.commit()
+    return redirect(f"/user/{g.user.id}/iti")

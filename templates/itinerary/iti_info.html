@@ -27,5 +27,8 @@
     </tr>
     {%endfor%}
   </table>
+  <form method="POST" action="/iti/{{ itinerary.id }}/delete">
+    <button class="btn btn-outline-danger">Delete</button>
+  </form>
 </div>
 {% endblock %}

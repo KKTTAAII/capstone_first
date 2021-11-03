@@ -18,7 +18,7 @@ class User(db.Model):
     email = db.Column(db.TEXT, nullable=False, unique=True)
     password = db.Column(db.TEXT, nullable=False)
 
-    itineraries = db.relationship('Itinerary', backref='user')
+    itineraries = db.relationship('Itinerary', backref='user', cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"<User {self.username}, {self.email}, {self.password}>"
@@ -56,8 +56,8 @@ class Itinerary(db.Model):
     start_date = db.Column(db.Date)
     end_date = db.Column(db.Date)
 
-    iti_hotels = db.relationship('Itinerary_hotel', backref='itinerary')
-    iti_rests = db.relationship('Itinerary_restaurant', backref='itinerary')
+    iti_hotels = db.relationship('Itinerary_hotel', backref='itinerary', cascade="all, delete-orphan")
+    iti_rests = db.relationship('Itinerary_restaurant', backref='itinerary', cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"<start date is {self.start_date}, end date is {self.end_date}>"
