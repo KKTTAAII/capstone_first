@@ -49,6 +49,7 @@ function initMap() {
   autocomplete.addListener("place_changed", onPlaceChanged);
   // Add a DOM event listener to react when the user selects a country.
   document
+    .getElementById("findplaces")
     .addEventListener("change", setAutocompleteCountry);
 }
 
