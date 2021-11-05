@@ -1,10 +1,19 @@
 import os
 
-from flask import Flask, redirect, render_template, flash, session, g, request
+from flask import Flask, json, redirect, render_template, flash, session, g, request, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 from models import db, connect_db, User, Itinerary, Itinerary_hotel, Itinerary_restaurant, Hotel, Restaurant, Fav_Hotel, Fav_Rest
-from forms import SignupForm, LoginForm, validate_end_date, validate_start_date
+from forms import SignupForm, LoginForm
 from sqlalchemy.exc import IntegrityError
+import requests
+import googlemaps
+import pprint
+import time
+
+
+API_KEY = ""
+#Define our Client
+gmaps = googlemaps.Client(key = API_KEY)
 
 
 app = Flask(__name__)
@@ -122,15 +131,17 @@ def show_user_page(user_id):
     user = User.query.get_or_404(user_id)
     return render_template("user/user_info.html", user=user)
 
+
 @app.route("/user/<int:user_id>/newiti", methods=["GET", "POST"])
 def add_new_itinerary(user_id):
     if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
+    ####### handle itinerary form#######
+    ####################################
+    ####################################
     if request.method == "POST":
-        # validate_start_date
-        # validate_end_date
         start_date = request.form.get("start_date")
         end_date = request.form.get("end_date")
         hotels = request.form.getlist("hotel")
@@ -171,6 +182,7 @@ def show_itinerary(iti_id):
     itinerary = Itinerary.query.get_or_404(iti_id)
     return render_template("itinerary/iti_info.html", itinerary=itinerary)
 
+
 @app.route("/user/<int:user_id>/iti")
 def show_all_itineraries(user_id):
     if not g.user:
@@ -181,13 +193,51 @@ def show_all_itineraries(user_id):
     all_iti = user.itineraries
     return render_template("itinerary/all_iti.html", all_iti=all_iti)
 
+
 @app.route("/iti/<int:iti_id>/delete", methods=["POST"])
 def delete_itinerary(iti_id):
     if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/")
-        
+
     itinerary = Itinerary.query.get_or_404(iti_id)
     db.session.delete(itinerary)
     db.session.commit()
     return redirect(f"/user/{g.user.id}/iti")
+
+
+@app.route("/iti/search")
+def find_places():
+    city = request.args.get("city")
+    type = request.args.get("type")
+    state = request.args.get("state")
+    result = []
+    ##get lat and lng for city and state name
+    try:
+        locations = gmaps.geocode(address=f"{city}{state}")
+        for location in locations:
+            city_name = location["address_components"][0]["long_name"]
+            state_name1 = location["address_components"][2]["short_name"]
+            state_name2 = location["address_components"][3]["short_name"]
+            lat = location["geometry"]["location"]["lat"]
+            lng = location["geometry"]["location"]["lng"]
+            if city_name.capitalize() == city.capitalize() and state in [state_name1, state_name2]:
+                lat = lat
+                lng = lng
+    ###get all places using lat, long
+                places_result = gmaps.places_nearby(location=(lat,lng), type=type, rank_by = "distance")
+                if(places_result["status"] == "OK"):
+                    for place in places_result['results']:
+                        my_place_id = place["place_id"]
+                        my_fields = ['name', 'website', 'adr_address', 'formatted_address', 'photo', 'formatted_phone_number', 'rating']
+            ###make requests for details
+                        place_details = gmaps.place(place_id = my_place_id, fields = my_fields)
+                        result.append(place_details)
+                    return jsonify(result)
+                else: 
+                    return jsonify({"result": "Results not found. Please try again"})
+            else: 
+                return jsonify({"result": "Location not found. Please enter correct city and state."})
+    except:
+        return jsonify({"result":"Oops, something's wrong. Please try again."})
+    
