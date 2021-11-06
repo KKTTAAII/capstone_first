@@ -239,6 +239,7 @@ def find_places():
                         my_fields = ['name', 'website', 'formatted_address', 'formatted_phone_number', 'rating']
             ###make request for details
                         place_details = gmaps.place(place_id = my_place_id, fields = my_fields)
+                        place_details["place_id"] = my_place_id
                         result.append(place_details)
                     return jsonify(result)
                 else: 

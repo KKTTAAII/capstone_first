@@ -16,6 +16,8 @@ const placeType = document.getElementById("type");
 const state = document.getElementById("state");
 const form = document.getElementById("search-form");
 
+
+// Ensure that the end date is not before the start date
 startDate.addEventListener(
   "change",
   function () {
@@ -24,6 +26,8 @@ startDate.addEventListener(
   false
 );
 
+
+// show options to add hotels and restaurants to the itinerary form when there are results only
 results.addEventListener(
   "DOMNodeInserted",
   function () {
@@ -43,16 +47,19 @@ results.addEventListener(
   false
 );
 
+// allows user to add multiple hotels
 addHotelBtn.addEventListener("click", function () {
   const clone = newHotelSelect.cloneNode(true);
   hotelInputDiv.appendChild(clone);
 });
 
+// allows user to add multiple restaurants
 addRestBtn.addEventListener("click", function () {
   const clone = newRestSelect.cloneNode(true);
   restInputDiv.appendChild(clone);
 });
 
+// get place names to make drop down options in itinerary form
 function getPlaceNames(placeNames) {
   for (let i = 0; i < results.childNodes.length; i++) {
     let name = results.childNodes[i].firstChild.innerText;
@@ -60,6 +67,7 @@ function getPlaceNames(placeNames) {
   }
 }
 
+//create drop down options from the results (names of places)
 function createOptions(placeType, inputDiv, names, selectTag) {
   let option = document.createElement("option");
   if (results.childNodes[0]) {
@@ -78,6 +86,7 @@ function createOptions(placeType, inputDiv, names, selectTag) {
 
 ////////////// handle Search box and display results in a table///////////////
 
+// make a request to BE to get results based on user inputs
 async function getResultsByLocation(city, state, type) {
   const resp = await axios.get("/iti/search", {
     params: { city: city, type: type, state: state },
@@ -85,6 +94,7 @@ async function getResultsByLocation(city, state, type) {
   return resp;
 }
 
+// add results to the html page
 function handleResults(data) {
   if(!Array.isArray(data)){
     const errorDiv = document.createElement("div")
@@ -140,19 +150,18 @@ function handleResults(data) {
   }
 }
 
+//extract user input from search form and send to BE
 async function processForm(evt) {
   evt.preventDefault();
   const type_name = placeType.value;
   const city_name = city.value;
   const state_name = state.value;
-  let response = await axios.get("/iti/search", {
-    params: { city: city_name, type: type_name, state: state_name },
-  });
+  let response = await getResultsByLocation(city_name, state_name, type_name)
   let data = response.data;
-  console.log(data);
   handleResults(data);
 }
 
+//clear results on the html page
 function clearResults(){
   while (results.childNodes[0]) {
     results.removeChild(results.childNodes[0]);
