@@ -14,3 +14,7 @@
 #addHotelBtn, #addRestBtn, #hotel_div, #rest_div {
     display: none;
 }
+
+.place-info {
+    display: block;
+}

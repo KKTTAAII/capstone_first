@@ -2,10 +2,17 @@
 <div>
   <h1>Your Itineraries</h1>
   {%for iti in all_iti%}
+  {%if iti.iti_name%}
+  <p><a href="/iti/{{iti.id}}">{{iti.iti_name}}</a></p>
+  <form method="POST" action="/iti/{{ iti.id }}/delete">
+    <button class="btn btn-outline-danger">Delete</button>
+  </form>
+  {%else%}
   <p><a href="/iti/{{iti.id}}">{{iti.start_date}}-{{iti.end_date}}</a></p>
   <form method="POST" action="/iti/{{ iti.id }}/delete">
     <button class="btn btn-outline-danger">Delete</button>
   </form>
+  {%endif%}
   {%endfor%}
 </div>
 {% endblock %}

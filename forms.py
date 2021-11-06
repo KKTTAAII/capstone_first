@@ -21,6 +21,10 @@ class LoginForm(FlaskForm):
     username = StringField("Username", validators=[InputRequired(message="Username can't be blank")])
     password = PasswordField("Password", validators=[Length(min=6)])
 
+class EditUsernameForm(FlaskForm):
+    username = StringField("Username", validators=[InputRequired(message="Username can't be blank")])
+
+
 # class ItineraryForm(FlaskForm):
 #     start_date = DateField("Start Date", format='%m-%d-%Y')
 #     end_date = DateField("End Date", format='%m-%d-%Y')

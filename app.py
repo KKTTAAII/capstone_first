@@ -3,8 +3,7 @@ import os
 from flask import Flask, json, redirect, render_template, flash, session, g, request, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 from models import db, connect_db, User, Itinerary, Itinerary_hotel, Itinerary_restaurant, Hotel, Restaurant, Fav_Hotel, Fav_Rest
-from forms import SignupForm, LoginForm
-from sqlalchemy.exc import IntegrityError
+from forms import SignupForm, LoginForm, EditUsernameForm
 import requests
 import googlemaps
 import pprint
@@ -122,14 +121,22 @@ def logout():
 ################User routes##############
 
 
-@app.route("/user/<int:user_id>")
+@app.route("/user/<int:user_id>", methods=["GET", "POST"])
 def show_user_page(user_id):
     if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
+    user = g.user    
+    form = LoginForm(obj=user)
+    if form.validate_on_submit():
+        if User.authenticate(user.username, form.password.data):
+            user.username = form.username.data
+            db.session.commit()
+            return redirect(f"/user/{user_id}")
+
     user = User.query.get_or_404(user_id)
-    return render_template("user/user_info.html", user=user)
+    return render_template("user/user_info.html", user=user, form=form)
 
 
 @app.route("/user/<int:user_id>/newiti", methods=["GET", "POST"])
@@ -139,15 +146,15 @@ def add_new_itinerary(user_id):
         return redirect("/")
 
     ####### handle itinerary form#######
-    ####################################
-    ####################################
+
     if request.method == "POST":
+        iti_name = request.form.get("iti-name")
         start_date = request.form.get("start_date")
         end_date = request.form.get("end_date")
         hotels = request.form.getlist("hotel")
         restaurants = request.form.getlist("restaurant")
 
-        new_iti = Itinerary(user_id=user_id, start_date=start_date, end_date=end_date)
+        new_iti = Itinerary(iti_name=iti_name,user_id=user_id, start_date=start_date, end_date=end_date)
         db.session.add(new_iti)
         db.session.commit()
 
@@ -213,8 +220,8 @@ def find_places():
     state = request.args.get("state")
     result = []
     ##get lat and lng for city and state name
-    try:
-        locations = gmaps.geocode(address=f"{city}{state}")
+    locations = gmaps.geocode(address=f"{city}{state}")
+    if locations:
         for location in locations:
             city_name = location["address_components"][0]["long_name"]
             state_name1 = location["address_components"][2]["short_name"]
@@ -224,13 +231,13 @@ def find_places():
             if city_name.capitalize() == city.capitalize() and state in [state_name1, state_name2]:
                 lat = lat
                 lng = lng
-    ###get all places using lat, long
+            ###make request for all places using lat, long
                 places_result = gmaps.places_nearby(location=(lat,lng), type=type, rank_by = "distance")
                 if(places_result["status"] == "OK"):
                     for place in places_result['results']:
                         my_place_id = place["place_id"]
-                        my_fields = ['name', 'website', 'adr_address', 'formatted_address', 'photo', 'formatted_phone_number', 'rating']
-            ###make requests for details
+                        my_fields = ['name', 'website', 'formatted_address', 'formatted_phone_number', 'rating']
+            ###make request for details
                         place_details = gmaps.place(place_id = my_place_id, fields = my_fields)
                         result.append(place_details)
                     return jsonify(result)
@@ -238,6 +245,6 @@ def find_places():
                     return jsonify({"result": "Results not found. Please try again"})
             else: 
                 return jsonify({"result": "Location not found. Please enter correct city and state."})
-    except:
+    else:
         return jsonify({"result":"Oops, something's wrong. Please try again."})
     

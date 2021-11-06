@@ -53,8 +53,9 @@ class Itinerary(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="cascade"), nullable=False)
-    start_date = db.Column(db.Date)
-    end_date = db.Column(db.Date)
+    iti_name = db.Column(db.Text)
+    start_date = db.Column(db.Date, nullable=False)
+    end_date = db.Column(db.Date, nullable=False)
 
     iti_hotels = db.relationship('Itinerary_hotel', backref='itinerary', cascade="all, delete-orphan")
     iti_rests = db.relationship('Itinerary_restaurant', backref='itinerary', cascade="all, delete-orphan")
