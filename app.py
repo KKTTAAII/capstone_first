@@ -4,6 +4,7 @@ from flask import Flask, json, redirect, render_template, flash, session, g, req
 from flask_debugtoolbar import DebugToolbarExtension
 from models import db, connect_db, User, Itinerary, Itinerary_hotel, Itinerary_restaurant, Hotel, Restaurant, Fav_Hotel, Fav_Rest
 from forms import SignupForm, LoginForm, EditUsernameForm
+from sqlalchemy.exc import IntegrityError
 import requests
 import googlemaps
 import pprint
@@ -153,28 +154,54 @@ def add_new_itinerary(user_id):
         end_date = request.form.get("end_date")
         hotels = request.form.getlist("hotel")
         restaurants = request.form.getlist("restaurant")
+        print(restaurants)
 
         new_iti = Itinerary(iti_name=iti_name,user_id=user_id, start_date=start_date, end_date=end_date)
         db.session.add(new_iti)
         db.session.commit()
 
-        
-
+        my_fields = ['name', 'website', 'formatted_address', 'formatted_phone_number', 'rating']
 
         for hotel in hotels:
-            new_hotel = Hotel(name=hotel.split(",")[0], google_id=hotel.split(",")[1])
-            db.session.add(new_hotel)
-            db.session.commit()
-            new_hotel_iti = Itinerary_hotel(itinerary_id=new_iti.id, hotel_id=new_hotel.id)
-            db.session.add(new_hotel_iti)
-            db.session.commit()
+            hotel_details = gmaps.place(place_id = hotel.split(",")[1], fields = my_fields)
+            if hotel_details:
+                hotel_address = hotel_details["result"]["formatted_address"]
+                if "formatted_phone_number" in hotel_details["result"].keys():
+                    hotel_number =hotel_details["result"]["formatted_phone_number"]
+                else:
+                    hotel_number = ""
+                if "website" in hotel_details["result"].keys():
+                    hotel_site =hotel_details["result"]["website"]
+                else:
+                    hotel_site = ""
+                new_hotel = Hotel(name=hotel.split(",")[0], address=hotel_address, website=hotel_site, number=hotel_number)
+                db.session.add(new_hotel)
+                db.session.commit()
+                new_hotel_iti = Itinerary_hotel(itinerary_id=new_iti.id, hotel_id=new_hotel.id)
+                db.session.add(new_hotel_iti)
+                db.session.commit()
+            else:
+                return
         for rest in restaurants:
-            new_rest = Restaurant(name=rest.split(",")[0], google_id=rest.split(",")[1])
-            db.session.add(new_rest)
-            db.session.commit()
-            new_rest_iti = Itinerary_restaurant(itinerary_id=new_iti.id, rest_id=new_rest.id)
-            db.session.add(new_rest_iti)
-            db.session.commit()
+            rest_details = gmaps.place(place_id = rest.split(",")[1], fields = my_fields)
+            if rest_details:
+                rest_address =rest_details["result"]["formatted_address"]
+                if "formatted_phone_number" in rest_details["result"].keys():
+                    rest_number =rest_details["result"]["formatted_phone_number"]
+                else:
+                    rest_number =  ""
+                if "website" in rest_details["result"].keys():
+                    rest_site =rest_details["result"]["website"]
+                else:
+                    rest_site = ""
+                new_rest = Restaurant(name=rest.split(",")[0], address=rest_address, website=rest_site, number=rest_number)
+                db.session.add(new_rest)
+                db.session.commit()
+                new_rest_iti = Itinerary_restaurant(itinerary_id=new_iti.id, rest_id=new_rest.id)
+                db.session.add(new_rest_iti)
+                db.session.commit()
+            else:
+                return 
         return redirect(f"/iti/{new_iti.id}")
 
     return render_template("itinerary/new_iti.html")
@@ -189,46 +216,10 @@ def show_itinerary(iti_id):
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
-    my_fields = ['name', 'website', 'formatted_address', 'formatted_phone_number', 'rating']
     itinerary = Itinerary.query.get_or_404(iti_id)
-    
-    hotels = []
-    rests = []
-    for hotel in itinerary.iti_hotels:
-        detail = {}
-        id = hotel.hotels.google_id
-        hotel_details = gmaps.place(place_id = id, fields = my_fields)
-        hotel_address = hotel_details["result"]["formatted_address"]
-        hotel_name = hotel_details["result"]["name"]
-        if "formatted_phone_number" in hotel_details["result"].keys():
-            hotel_number =hotel_details["result"]["formatted_phone_number"]
-            detail["number"] = hotel_number
-        if "website" in hotel_details["result"].keys():
-            hotel_site =hotel_details["result"]["website"]
-            detail["site"] = hotel_site
-        detail["name"] = hotel_name
-        detail["address"] = hotel_address
-        hotels.append(detail)
-
-    for rest in itinerary.iti_rests:
-        detail = {}
-        id = rest.rests.google_id
-        rest_details = gmaps.place(place_id = id, fields = my_fields)
-        rest_address =rest_details["result"]["formatted_address"]
-        rest_name =rest_details["result"]["name"]
-        if "formatted_phone_number" in rest_details["result"].keys():
-            rest_number =rest_details["result"]["formatted_phone_number"]
-            detail["number"] = rest_number
-        if "website" in rest_details["result"].keys():
-            rest_site =rest_details["result"]["website"]
-            detail["site"] = rest_site
-        detail["name"] = rest_name
-        detail["address"] = rest_address
-        rests.append(detail)
 
     return render_template("itinerary/iti_info.html", 
-    itinerary=itinerary, rest_details=rests, 
-    hotel_details=hotels)
+    iti=itinerary)
 
 
 @app.route("/user/<int:user_id>/iti")

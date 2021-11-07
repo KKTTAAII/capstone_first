@@ -1,58 +1,60 @@
 {% extends 'base.html' %} {% block content %}
 <div id="iti-info">
   <h1>{{g.user.username}}'s Trip!</h1>
-  <h2>{{itinerary.iti_name}}</h2>
+  <h2>{{iti.iti_name}}</h2>
   <table class="table">
     <tr>
       <th scope="col">Start Date</th>
       <th scope="col">End Date</th>
     </tr>
     <tr>
-      <td>{{itinerary.start_date}}</td>
-      <td>{{itinerary.end_date}}</td>
+      <td>{{iti.start_date}}</td>
+      <td>{{iti.end_date}}</td>
     </tr>
     <tr>
       <th scope="col">Hotels</th>
     </tr>
-    {%for detail in hotel_details%}
-    <tr>
-      <td>{{detail.name}}</td>
 
+    {%for hotel in iti.iti_hotels %}
+    <tr>
+      <td>{{hotel.hotels.name}}</td>
       <td>
         <div>
-          <p>{{detail.address}}</p>
-          {%if detail.number%}
-          <p>{{detail.number}}</p>
+          <p>{{hotel.hotels.address}}</p>
+          {%if hotel.hotels.website%}
+          <p>{{hotel.hotels.website}}</p>
           {%endif%}
-          {%if detail.site%}
-          <p>{{detail.site}}</p>
+          {%if hotel.hotels.number%}
+          <p>{{hotel.hotels.number}}</p>
           {%endif%}
         </div>
       </td>
     </tr>
     {%endfor%}
+    
     <tr>
       <th scope="col">Resturants</th>
     </tr>
-    {%for detail in rest_details%}
-    <tr>
-      <td>{{detail.name}}</td>
 
+    {%for rest in iti.iti_rests %}
+    <tr>
+      <td>{{rest.rests.name}}</td>
       <td>
         <div>
-          <p>{{detail.address}}</p>
-          {%if detail.number%}
-          <p>{{detail.number}}</p>
+          <p>{{rest.rests.address}}</p>
+          {%if rest.rests.website%}
+          <p>{{rest.rests.website}}</p>
           {%endif%}
-          {%if detail.site%}
-          <p>{{detail.site}}</p>
+          {%if rest.rests.number%}
+          <p>{{rest.rests.number}}</p>
           {%endif%}
         </div>
       </td>
     </tr>
     {%endfor%}
+
   </table>
-  <form method="POST" action="/iti/{{ itinerary.id }}/delete">
+  <form method="POST" action="/iti/{{ iti.id }}/delete">
     <button class="btn btn-outline-danger">Delete</button>
   </form>
 </div>

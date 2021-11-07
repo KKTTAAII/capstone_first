@@ -96,7 +96,9 @@ class Hotel(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.Text, nullable=False)
-    google_id = db.Column(db.Text)
+    address = db.Column(db.Text)
+    website = db.Column(db.Text)
+    number = db.Column(db.Text)
 
     def __repr__(self):
         return f"<Hotel api {self.name}>"
@@ -107,7 +109,9 @@ class Restaurant(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.Text, nullable=False)
-    google_id = db.Column(db.Text)
+    address = db.Column(db.Text)
+    website = db.Column(db.Text)
+    number = db.Column(db.Text)
 
     def __repr__(self):
         return f"<Restaurant api {self.name}>"
