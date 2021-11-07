@@ -8,23 +8,47 @@
       <th scope="col">End Date</th>
     </tr>
     <tr>
-        <td>{{itinerary.start_date}}</td>
-        <td>{{itinerary.end_date}}</td>
+      <td>{{itinerary.start_date}}</td>
+      <td>{{itinerary.end_date}}</td>
     </tr>
     <tr>
-        <th scope="col">Hotels</th>
+      <th scope="col">Hotels</th>
     </tr>
-    {%for iti in itinerary.iti_hotels%}
+    {%for detail in hotel_details%}
     <tr>
-        <td>{{iti.hotels.name}}</td>
+      <td>{{detail.name}}</td>
+
+      <td>
+        <div>
+          <p>{{detail.address}}</p>
+          {%if detail.number%}
+          <p>{{detail.number}}</p>
+          {%endif%}
+          {%if detail.site%}
+          <p>{{detail.site}}</p>
+          {%endif%}
+        </div>
+      </td>
     </tr>
     {%endfor%}
     <tr>
-        <th scope="col">Resturants</th>
+      <th scope="col">Resturants</th>
     </tr>
-    {%for iti in itinerary.iti_rests%}
+    {%for detail in rest_details%}
     <tr>
-        <td>{{iti.rests.name}}</td>
+      <td>{{detail.name}}</td>
+
+      <td>
+        <div>
+          <p>{{detail.address}}</p>
+          {%if detail.number%}
+          <p>{{detail.number}}</p>
+          {%endif%}
+          {%if detail.site%}
+          <p>{{detail.site}}</p>
+          {%endif%}
+        </div>
+      </td>
     </tr>
     {%endfor%}
   </table>

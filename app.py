@@ -96,8 +96,6 @@ def login():
     
     form = LoginForm()
 
-    pprint.pprint(form.username.data)
-    pprint.pprint(form.password.data)
     if form.validate_on_submit():
         user = User.authenticate(form.username.data,
                                  form.password.data)
@@ -160,15 +158,18 @@ def add_new_itinerary(user_id):
         db.session.add(new_iti)
         db.session.commit()
 
+        
+
+
         for hotel in hotels:
-            new_hotel = Hotel(name=hotel)
+            new_hotel = Hotel(name=hotel.split(",")[0], google_id=hotel.split(",")[1])
             db.session.add(new_hotel)
             db.session.commit()
             new_hotel_iti = Itinerary_hotel(itinerary_id=new_iti.id, hotel_id=new_hotel.id)
             db.session.add(new_hotel_iti)
             db.session.commit()
         for rest in restaurants:
-            new_rest = Restaurant(name=rest)
+            new_rest = Restaurant(name=rest.split(",")[0], google_id=rest.split(",")[1])
             db.session.add(new_rest)
             db.session.commit()
             new_rest_iti = Itinerary_restaurant(itinerary_id=new_iti.id, rest_id=new_rest.id)
@@ -188,8 +189,46 @@ def show_itinerary(iti_id):
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
+    my_fields = ['name', 'website', 'formatted_address', 'formatted_phone_number', 'rating']
     itinerary = Itinerary.query.get_or_404(iti_id)
-    return render_template("itinerary/iti_info.html", itinerary=itinerary)
+    
+    hotels = []
+    rests = []
+    for hotel in itinerary.iti_hotels:
+        detail = {}
+        id = hotel.hotels.google_id
+        hotel_details = gmaps.place(place_id = id, fields = my_fields)
+        hotel_address = hotel_details["result"]["formatted_address"]
+        hotel_name = hotel_details["result"]["name"]
+        if "formatted_phone_number" in hotel_details["result"].keys():
+            hotel_number =hotel_details["result"]["formatted_phone_number"]
+            detail["number"] = hotel_number
+        if "website" in hotel_details["result"].keys():
+            hotel_site =hotel_details["result"]["website"]
+            detail["site"] = hotel_site
+        detail["name"] = hotel_name
+        detail["address"] = hotel_address
+        hotels.append(detail)
+
+    for rest in itinerary.iti_rests:
+        detail = {}
+        id = rest.rests.google_id
+        rest_details = gmaps.place(place_id = id, fields = my_fields)
+        rest_address =rest_details["result"]["formatted_address"]
+        rest_name =rest_details["result"]["name"]
+        if "formatted_phone_number" in rest_details["result"].keys():
+            rest_number =rest_details["result"]["formatted_phone_number"]
+            detail["number"] = rest_number
+        if "website" in rest_details["result"].keys():
+            rest_site =rest_details["result"]["website"]
+            detail["site"] = rest_site
+        detail["name"] = rest_name
+        detail["address"] = rest_address
+        rests.append(detail)
+
+    return render_template("itinerary/iti_info.html", 
+    itinerary=itinerary, rest_details=rests, 
+    hotel_details=hotels)
 
 
 @app.route("/user/<int:user_id>/iti")

@@ -76,20 +76,22 @@ function getPlaceNames(placeName) {
 //create drop down options from the results (names of places)
 function createOptions(placeType, inputDiv, names, selectTag) {
   let option = document.createElement("option");
+  let input = document.createElement("input")
   if (results.childNodes[0]) {
     selectTag.name = placeType;
     selectTag.id = placeType;
 
     for (let i = 0; i < names.length; i++) {
-      option.value = names[i]["name"];
+      option.value = [names[i]["name"] , names[i]["id"]];
       option.text = names[i]["name"];
-      option.id = names[i]["id"]
       selectTag.appendChild(option);
     }
     inputDiv.appendChild(selectTag);
   }
   return;
 }
+
+
 
 
 
