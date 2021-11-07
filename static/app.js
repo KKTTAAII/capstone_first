@@ -17,6 +17,8 @@ const state = document.getElementById("state");
 const form = document.getElementById("search-form");
 
 
+
+
 // Ensure that the end date is not before the start date
 startDate.addEventListener(
   "change",
@@ -60,10 +62,14 @@ addRestBtn.addEventListener("click", function () {
 });
 
 // get place names to make drop down options in itinerary form
-function getPlaceNames(placeNames) {
+function getPlaceNames(placeName) {
   for (let i = 0; i < results.childNodes.length; i++) {
+    let nameId = {}
     let name = results.childNodes[i].firstChild.innerText;
-    placeNames.push(name);
+    let id = results.childNodes[i].firstChild.id
+    nameId["name"] = name
+    nameId["id"] = id
+    placeName.push(nameId);
   }
 }
 
@@ -74,15 +80,18 @@ function createOptions(placeType, inputDiv, names, selectTag) {
     selectTag.name = placeType;
     selectTag.id = placeType;
 
-    for (const name of names) {
-      option.value = name;
-      option.text = name;
+    for (let i = 0; i < names.length; i++) {
+      option.value = names[i]["name"];
+      option.text = names[i]["name"];
+      option.id = names[i]["id"]
       selectTag.appendChild(option);
     }
     inputDiv.appendChild(selectTag);
   }
   return;
 }
+
+
 
 ////////////// handle Search box and display results in a table///////////////
 
@@ -107,8 +116,10 @@ function handleResults(data) {
   for (i = 0; i < data.length; i++) {
     let name = data[i]["result"]["name"];
     let address = data[i]["result"]["formatted_address"];
+    let placeId = data[i]["place_id"];
     const tr = document.createElement("tr");
     const nameTd = document.createElement("td");
+    nameTd.id = placeId;
     const placeName = document.createTextNode(name);
     const infoDiv = document.createElement("div");
     infoDiv.className = "place-info";
@@ -168,5 +179,6 @@ function clearResults(){
   }
 }
 
+//show account edit form when user clicks "Update account info" btn
 form.addEventListener("submit", processForm);
 form.addEventListener("change", clearResults)

@@ -18,3 +18,18 @@
 .place-info {
     display: block;
 }
+
+#update-user {
+    display: none;
+}
+
+body,html, #content {
+    height: 100%;
+  }
+
+#home-user, #home {
+    color:whitesmoke;
+    background-image: url("/static/pictures/brett-zeck-eyfMgGvo9PA-unsplash.jpg");
+    background-size: cover;
+}
+

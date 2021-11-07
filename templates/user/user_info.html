@@ -1,38 +1,51 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} {% block content %}
 
-{% block content %}
-
-<div id=user-info>
-    <p>Username: {{user.username}}</p>
-    <p>Email: {{user.email}}</p>
-    <button><a href="/user/{{user.id}}/newiti">Create Itinerary</a></button>
+<div id="user-info" class="text-center mt-3">
+  <h2>Account Information</h2>
+  <p><b>Username:</b> {{user.username}}</p>
+  <p><b>Email:</b> {{user.email}}</p>
+  <a href="/user/{{user.id}}/newiti"
+    ><button class="btn btn-success">Create Itinerary</button></a
+  >
 </div>
 
-<div id="update-user">
-    <h2 class="join-message">Change username</h2>
-      <form method="POST" id="user_form">
-        {{ form.hidden_tag() }}
-
-        {% for field in form if field.widget.input_type != 'hidden' and field.name != 'password' %}
-          {% for error in field.errors %}
-            <span class="text-danger">{{ error }}</span>
-          {% endfor %}
-          {{field.label}}:{{ field(placeholder=field.label.text, class="form-control") }}
-        {% endfor %}
-
-        <p>To confirm changes, enter your password:</p>
-        {% if form.password.errors %}
-          {% for error in form.password.errors %}
-            <span class="text-danger">
-            {{ error }}
-          </span>
-          {% endfor %}
-        {% endif %}
-        {{ form.password(placeholder="Enter your password to confirm", class="form-control") }}
-
-        <div class="edit-btn-area">
-          <button class="btn btn-success">Update my username!</button>
-          <a href="/users/{{ user.id }}" class="btn btn-outline-secondary">Cancel</a>
+<div class="container text-center">
+  <button id="editBtn" class="btn btn-warning mt-3">Update Account Info</button>
 </div>
 
+<div id="update-user" class="text-center mt-3">
+  <h2 class="join-message">Change username</h2>
+  <form method="POST" id="user_form" role="form">
+    <div class="row justify-content-center">
+      {{ form.hidden_tag() }} {% for field in form if field.widget.input_type !=
+      'hidden' and field.name != 'password' %} {% for error in field.errors %}
+      <span class="text-danger">{{ error }}</span>
+      {% endfor %}
+      <div class="form-group col-lg-2">
+        {{field.label}}:{{ field(placeholder=field.label.text,
+        class="form-control me-sm-2") }}
+      </div>
+      {% endfor %}
+    </div>
+    <div class="row justify-content-center">
+      <p>To confirm changes, enter your password:</p>
+      {% if form.password.errors %} {% for error in form.password.errors %}
+      <span class="text-danger"> {{ error }} </span>
+      {% endfor %} {% endif %}
+      <div class="form-group col-lg-2">
+        {{ form.password(placeholder="Enter your password to confirm",
+        class="form-control me-sm-2") }}
+      </div>
+    </div>
+
+    <div class="edit-btn-area mt-2">
+      <button class="btn btn-success" id="editBtn">Update my username!</button>
+      <br />
+      <a href="/user/{{ user.id }}" class="btn btn-outline-secondary mt-2"
+        >Cancel</a
+      >
+    </div>
+  </form>
+</div>
+<script src="/static/account_edit.js"></script>
 {% endblock %}

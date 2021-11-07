@@ -96,6 +96,8 @@ def login():
     
     form = LoginForm()
 
+    pprint.pprint(form.username.data)
+    pprint.pprint(form.password.data)
     if form.validate_on_submit():
         user = User.authenticate(form.username.data,
                                  form.password.data)
@@ -104,8 +106,8 @@ def login():
             do_login(user)
             flash(f"Hello, {user.username}!", "success")
             return redirect("/")
-
-        flash("Invalid credentials.", 'danger')
+        else:
+            flash("Invalid credentials.", 'danger')
 
     return render_template('user/login.html', form=form)
 

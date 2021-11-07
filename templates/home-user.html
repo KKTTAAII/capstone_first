@@ -1,9 +1,11 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div>
-    <h1>The Conceirge, a personal trip planner for you</h1>
-    <p>Create your next trip Itinerary <a href="/user/{{g.user.id}}/newiti">now</a></p>
+<div class="row align-items-center h-100 text-center" id="home-user">
+    <div class="col-5 mx-auto" id="textContainer">
+        <h1 >The Conceirge, a personal trip planner for you</h1>
+        <h4>Create your next trip Itinerary <a href="/user/{{g.user.id}}/newiti">now</a></h4>
+    </div>
 </div>
 
 {% endblock %}
