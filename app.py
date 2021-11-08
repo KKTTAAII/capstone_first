@@ -3,7 +3,7 @@ import os
 from flask import Flask, json, redirect, render_template, flash, session, g, request, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 from models import db, connect_db, User, Itinerary, Itinerary_hotel, Itinerary_restaurant, Hotel, Restaurant, Fav_Hotel, Fav_Rest
-from forms import SignupForm, LoginForm, EditUsernameForm
+from forms import SignupForm, LoginForm
 from sqlalchemy.exc import IntegrityError
 import requests
 import googlemaps
@@ -255,12 +255,14 @@ def find_places():
     locations = gmaps.geocode(address=f"{city}{state}")
     if locations:
         for location in locations:
+            check_state_list = []
             city_name = location["address_components"][0]["long_name"]
-            state_name1 = location["address_components"][2]["short_name"]
-            state_name2 = location["address_components"][3]["short_name"]
+            for obj in location["address_components"]:
+                name = obj["short_name"]
+                check_state_list.append(name)
             lat = location["geometry"]["location"]["lat"]
             lng = location["geometry"]["location"]["lng"]
-            if city_name.capitalize() == city.capitalize() and state in [state_name1, state_name2]:
+            if city_name.capitalize() == city.capitalize() and state in check_state_list:
                 lat = lat
                 lng = lng
             ###make request for all places using lat, long

@@ -6,14 +6,25 @@
       <div class="form-row">
         <div id="place-type" class="form-group col my-1">
           <label for="type">Find</label>
-          <select name="type" id="type" id="type" class="form-control form-select">
+          <select
+            name="type"
+            id="type"
+            id="type"
+            class="form-control form-select"
+          >
             <option value="lodging">hotels</option>
             <option value="restaurant">restaurants</option>
           </select>
         </div>
         <div id="city-name" class="form-group col-5 my-1">
           <label for="city">City</label>
-          <input id="city" placeholder="Enter a city" type="text" name="city" class="form-control"/>
+          <input
+            id="city"
+            placeholder="Enter a city"
+            type="text"
+            name="city"
+            class="form-control"
+          />
         </div>
         <div id="state-name" class="form-group col my-1">
           <label for="state">State</label>
@@ -72,7 +83,9 @@
           </select>
         </div>
         <div id="searchBtn" class="col-auto my-1">
-          <button class="btn btn-primary btn-md btn-block search-btn" >Search</button>
+          <button class="btn btn-primary btn-md btn-block search-btn">
+            Search
+          </button>
         </div>
       </div>
     </form>
@@ -81,7 +94,7 @@
   <div class="row mt-5">
     <div class="col-sm">
       <div id="listing">
-        <table id="resultsTable" class="table table-bordered table-striped">
+        <table id="resultsTable" class="table table-bordered">
           <tbody id="results"></tbody>
         </table>
       </div>
@@ -90,51 +103,73 @@
     <div class="col-sm">
       <div class="itinerary container text-center form-group">
         <div class="iti-header">
-          <h1>Vacation Plans</h1>
+          <h1>Vacation Plan</h1>
         </div>
         <div class="iti-form-container">
           <form method="POST" id="iti-form">
             <div id="iti-name">
               <label for="iti-name" class="form-label">Itinerary Name</label>
-              <input type="text" name="iti-name" required="required" class="form-control" />
+              <input
+                type="text"
+                name="iti-name"
+                class="form-control"
+              />
+              <small id="name-error" class="error ml-0"></small>
             </div>
             <div id="start_date_div">
               <label for="start_date" class="form-label">Start Date</label>
-              <input type="date" name="start_date" required="required" class="form-control"/>
+              <input
+                type="date"
+                name="start_date"
+                class="form-control"
+              />
+              <small id="start-date-error" class="error ml-0"></small>
             </div>
 
             <div id="end_date_div">
-              <label for="start_date" >End Date</label>
-              <input type="date" name="end_date" required="required" class="form-control"/>
+              <label for="end_date">End Date</label>
+              <input
+                type="date"
+                name="end_date"
+                class="form-control"
+              />
+              <small id="end-date-error" class="error ml-0"></small>
             </div>
 
             <div id="hotel_div">
               <label for="hotel" class="form-label">Hotel</label>
             </div>
 
-            <button
-              type="button"
-              class="addHotel btn btn-primary btn-sm btn-block"
-              id="addHotelBtn"
-            >
-              +
-            </button>
+              <button
+                type="button"
+                class="addHotel btn btn-primary btn-sm btn-block"
+                id="addHotelBtn"
+              >
+                +
+              </button>
+  
 
             <div id="rest_div">
               <label for="restaurant" class="form-label">Restaurant</label>
             </div>
 
             <br />
+    
+              <button
+                type="button"
+                class="addRest btn btn-primary btn-sm btn-block"
+                id="addRestBtn"
+              >
+                +
+              </button>
+
+            <br />
+            <br />
             <button
-              type="button"
-              class="addRest btn btn-primary btn-sm btn-block"
-              id="addRestBtn"
+              type="submit"
+              class="btn btn-primary btn-lg btn-block"
+              id="submitItiBtn"
             >
-              +
-            </button>
-            <br />
-            <br />
-            <button type="submit" class="btn btn-primary btn-lg btn-block" id="submitItiBtn">
               Plan my trip
             </button>
           </form>
@@ -143,6 +178,6 @@
     </div>
   </div>
 </div>
-<script src="/static/app.js"></script>
+<script src="/static/new_iti.js"></script>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 {% endblock %}

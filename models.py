@@ -116,22 +116,3 @@ class Restaurant(db.Model):
     def __repr__(self):
         return f"<Restaurant api {self.name}>"
 
-class Fav_Hotel(db.Model):
-
-    __tablename__ = "fav_hotels"
-
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="cascade"), nullable=False, primary_key=True, )
-    hotel_id = db.Column(db.Integer, db.ForeignKey("hotels.id", ondelete="cascade"), nullable=False, primary_key=True)
-
-    def __repr__(self):
-        return f"<Fav Hotel {self.user_id}, {self.hotel_id}>"
-
-class Fav_Rest(db.Model):
-
-    __tablename__ = "fav_restaurants"
-
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="cascade"), nullable=False, primary_key=True )
-    rest_id = db.Column(db.Integer, db.ForeignKey("restaurants.id", ondelete="cascade"), nullable=False, primary_key=True)
-
-    def __repr__(self):
-        return f"<Fav Hotel {self.user_id}, {self.rest_id}>"
