@@ -1,5 +1,9 @@
 .itinerary {
-    width: 300px;
+    width: 100%;
+    height: 500px;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
 }
 
 .main {
@@ -23,13 +27,48 @@
     display: none;
 }
 
-body,html, #content {
-    height: 100%;
-  }
-
 #home-user, #home {
     color:whitesmoke;
     background-image: url("/static/pictures/brett-zeck-eyfMgGvo9PA-unsplash.jpg");
     background-size: cover;
 }
 
+#iti-table-container{
+    width: 100%
+}
+
+#iti-table{
+    width: 500px;
+    margin: auto;
+}
+
+#date {
+    display: flex;
+    justify-content: center;
+}
+
+#start_date, #end_date {
+    margin-left: 15px;
+}
+
+.card {
+    width: 500px;
+    margin: 0 auto;
+}
+
+#errorpic404, #errorpic500 {
+    height: 300px;
+}
+
+.search-btn {
+    margin-top: 30px;
+}
+
+#submitItiBtn{
+    width: 200px;
+    margin: 0 auto;
+}
+
+div#listing {
+    width: 100%;
+  }

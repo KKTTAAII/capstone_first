@@ -1,61 +1,59 @@
 {% extends 'base.html' %} {% block content %}
-<div id="iti-info">
+<div id="iti-info" class="text-center mt-3">
   <h1>{{g.user.username}}'s Trip!</h1>
   <h2>{{iti.iti_name}}</h2>
-  <table class="table">
-    <tr>
-      <th scope="col">Start Date</th>
-      <th scope="col">End Date</th>
-    </tr>
-    <tr>
-      <td>{{iti.start_date}}</td>
-      <td>{{iti.end_date}}</td>
-    </tr>
-    <tr>
-      <th scope="col">Hotels</th>
-    </tr>
 
-    {%for hotel in iti.iti_hotels %}
-    <tr>
-      <td>{{hotel.hotels.name}}</td>
-      <td>
-        <div>
-          <p>{{hotel.hotels.address}}</p>
-          {%if hotel.hotels.website%}
-          <p>{{hotel.hotels.website}}</p>
-          {%endif%}
-          {%if hotel.hotels.number%}
-          <p>{{hotel.hotels.number}}</p>
-          {%endif%}
-        </div>
-      </td>
-    </tr>
-    {%endfor%}
-    
-    <tr>
-      <th scope="col">Resturants</th>
-    </tr>
+<div id="date" class="mt-3 mb-3">
+  <div id="start_date"><b>Start Date:</b> {{iti.start_date}}</div>
+  <div id="end_date"><b>End Date:</b> {{iti.end_date}}</div>
+</div> 
 
-    {%for rest in iti.iti_rests %}
-    <tr>
-      <td>{{rest.rests.name}}</td>
-      <td>
-        <div>
-          <p>{{rest.rests.address}}</p>
-          {%if rest.rests.website%}
-          <p>{{rest.rests.website}}</p>
-          {%endif%}
-          {%if rest.rests.number%}
-          <p>{{rest.rests.number}}</p>
-          {%endif%}
-        </div>
-      </td>
-    </tr>
-    {%endfor%}
+  <div id="iti-table-container">
+    <table id="iti-table" class="table table-bordered">
+      <tr class="table-secondary">
+        <th colspan="2">Hotels</th>
+      </tr>
 
-  </table>
-  <form method="POST" action="/iti/{{ iti.id }}/delete">
-    <button class="btn btn-outline-danger">Delete</button>
+      {%for hotel in iti.iti_hotels %}
+      <tr class="table-success">
+        <td>{{hotel.hotels.name}}</td>
+        <td>
+          <div>
+            <p>{{hotel.hotels.address}}</p>
+            {%if hotel.hotels.website%}
+            <a href="{{hotel.hotels.website}}" class="text-white"><p>{{hotel.hotels.website}}</p></a>
+            {%endif%} {%if hotel.hotels.number%}
+            <p>{{hotel.hotels.number}}</p>
+            {%endif%}
+          </div>
+        </td>
+      </tr>
+      {%endfor%}
+
+      <tr class="table-secondary">
+        <th colspan="2">Resturants</th>
+      </tr>
+
+      {%for rest in iti.iti_rests %}
+      <tr class="table-success">
+        <td>{{rest.rests.name}}</td>
+        <td>
+          <div>
+            <p>{{rest.rests.address}}</p>
+            {%if rest.rests.website%}
+            <a href="{{rest.rests.website}}" class="text-white"><p>{{rest.rests.website}}</p></a>
+            {%endif%} {%if rest.rests.number%}
+            <p>{{rest.rests.number}}</p>
+            {%endif%}
+          </div>
+        </td>
+      </tr>
+      {%endfor%}
+    </table>
+  </div>
+
+  <form method="POST" action="/iti/{{ iti.id }}/delete" class="mt-3">
+    <button class="btn btn-danger">Delete</button>
   </form>
 </div>
 {% endblock %}

@@ -80,6 +80,7 @@ function createOptions(placeType, inputDiv, names, selectTag) {
   if (results.childNodes[0]) {
     selectTag.name = placeType;
     selectTag.id = placeType;
+    selectTag.className = "form-select mb-2"
 
     for (let i = 0; i < names.length; i++) {
       option.value = [names[i]["name"] , names[i]["id"]];
@@ -108,11 +109,8 @@ async function getResultsByLocation(city, state, type) {
 // add results to the html page
 function handleResults(data) {
   if(!Array.isArray(data)){
-    const errorDiv = document.createElement("div")
-    const errorMsg = document.createElement("p")
-    errorMsg.innerHTML = data["result"]
-    errorDiv.appendChild(errorMsg)
-    results.appendChild(errorDiv);
+    errorMsg = data["result"]
+    Swal.fire(errorMsg);
   }
 
   for (i = 0; i < data.length; i++) {
