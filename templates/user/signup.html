@@ -2,8 +2,8 @@
 
 {% block content %}
 
-<div>
-  <form method="POST">
+<div id="signupForm" class="row align-items-center text-center">
+  <form method="POST" class="col-25 mx-auto">
     {{ form.hidden_tag() }} 
 
     {% for field in form if field.widget.input_type != 'hidden' %} 

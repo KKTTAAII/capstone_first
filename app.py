@@ -2,7 +2,7 @@ import os
 
 from flask import Flask, json, redirect, render_template, flash, session, g, request, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
-from models import db, connect_db, User, Itinerary, Itinerary_hotel, Itinerary_restaurant, Hotel, Restaurant, Fav_Hotel, Fav_Rest
+from models import db, connect_db, User, Itinerary, Itinerary_hotel, Itinerary_restaurant, Hotel, Restaurant
 from forms import SignupForm, LoginForm
 from sqlalchemy.exc import IntegrityError
 import requests

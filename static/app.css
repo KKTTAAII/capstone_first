@@ -86,3 +86,10 @@ div#listing {
 .error {
     color: rgb(228, 148, 148);
 }
+
+#signupForm, #loginForm {
+    width: 300px;
+    margin: 0 auto;
+    height: 600px;
+}
+

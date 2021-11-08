@@ -1,6 +1,6 @@
 {% extends 'base.html' %} {% block content %}
 
-<div id="user-info" class="text-center mt-3">
+<div id="user-info" class="text-center mt-5">
   <h2>Account Information</h2>
   <p><b>Username:</b> {{user.username}}</p>
   <p><b>Email:</b> {{user.email}}</p>
@@ -13,7 +13,7 @@
   <button id="editBtn" class="btn btn-warning mt-3">Update Account Info</button>
 </div>
 
-<div id="update-user" class="text-center mt-3">
+<div id="update-user" class="text-center mt-5">
   <h2 class="join-message">Change username</h2>
   <form method="POST" id="user_form" role="form">
     <div class="row justify-content-center">
@@ -41,7 +41,7 @@
     <div class="edit-btn-area mt-2">
       <button class="btn btn-success" id="editBtn">Update my username!</button>
       <br />
-      <a href="/user/{{ user.id }}" class="btn btn-outline-secondary mt-2"
+      <a href="/user/{{ user.id }}" class="btn btn-danger mt-2"
         >Cancel</a
       >
     </div>
