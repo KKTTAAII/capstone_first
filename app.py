@@ -31,6 +31,34 @@ toolbar = DebugToolbarExtension(app)
 connect_db(app)
 db.create_all()
 
+def get_place_details(fields, places):
+    all_places_details = []
+    for place in places:
+        detail_list = []
+        details = gmaps.place(place_id = place.split(",")[1], fields = fields)
+        place_id = place.split(",")[0]
+        detail_list.append(place_id)
+        if details:
+            address = details["result"]["formatted_address"]
+            detail_list.append(address)
+            if "formatted_phone_number" in details["result"].keys():
+                number = details["result"]["formatted_phone_number"]
+                detail_list.append(number)
+            else:
+                number = ""
+                detail_list.append(number)
+            if "website" in details["result"].keys():
+                site = details["result"]["website"]
+                detail_list.append(site)
+            else:
+                site = ""
+                detail_list.append(site)
+            all_places_details.append(detail_list)
+        else:
+            return 
+    return all_places_details
+
+
 @app.before_request
 def add_user_to_g():
 
@@ -39,17 +67,15 @@ def add_user_to_g():
     else:
         g.user = None
 
-    
-
 def do_login(user):
 
     session[CURR_USER_KEY] = user.id
-
 
 def do_logout():
 
     if CURR_USER_KEY in session:
         del session[CURR_USER_KEY]
+
 
 ############root route#############
 
@@ -79,7 +105,6 @@ def signup():
             db.session.commit()
         except IntegrityError as e:
             constraint = e.orig.diag.constraint_name
-            print(constraint)
             if(constraint == "users_email_key"):
                 flash("Email already registered", 'danger')
             if(constraint == "users_username_key"):
@@ -100,14 +125,12 @@ def login():
     if form.validate_on_submit():
         user = User.authenticate(form.username.data,
                                  form.password.data)
-
         if user:
             do_login(user)
             flash(f"Hello, {user.username}!", "success")
             return redirect("/")
         else:
             flash("Invalid credentials.", 'danger')
-
     return render_template('user/login.html', form=form)
 
 
@@ -154,7 +177,6 @@ def add_new_itinerary(user_id):
         end_date = request.form.get("end_date")
         hotels = request.form.getlist("hotel")
         restaurants = request.form.getlist("restaurant")
-        print(restaurants)
 
         new_iti = Itinerary(iti_name=iti_name,user_id=user_id, start_date=start_date, end_date=end_date)
         db.session.add(new_iti)
@@ -162,46 +184,26 @@ def add_new_itinerary(user_id):
 
         my_fields = ['name', 'website', 'formatted_address', 'formatted_phone_number', 'rating']
 
-        for hotel in hotels:
-            hotel_details = gmaps.place(place_id = hotel.split(",")[1], fields = my_fields)
-            if hotel_details:
-                hotel_address = hotel_details["result"]["formatted_address"]
-                if "formatted_phone_number" in hotel_details["result"].keys():
-                    hotel_number =hotel_details["result"]["formatted_phone_number"]
-                else:
-                    hotel_number = ""
-                if "website" in hotel_details["result"].keys():
-                    hotel_site =hotel_details["result"]["website"]
-                else:
-                    hotel_site = ""
-                new_hotel = Hotel(name=hotel.split(",")[0], address=hotel_address, website=hotel_site, number=hotel_number)
+        hotel_details = get_place_details(my_fields, hotels)
+        if hotel_details:
+            for detail in hotel_details:
+                new_hotel = Hotel(name=detail[0], address=detail[1], number=detail[2], website=detail[3])
                 db.session.add(new_hotel)
                 db.session.commit()
                 new_hotel_iti = Itinerary_hotel(itinerary_id=new_iti.id, hotel_id=new_hotel.id)
                 db.session.add(new_hotel_iti)
                 db.session.commit()
-            else:
-                return
-        for rest in restaurants:
-            rest_details = gmaps.place(place_id = rest.split(",")[1], fields = my_fields)
-            if rest_details:
-                rest_address =rest_details["result"]["formatted_address"]
-                if "formatted_phone_number" in rest_details["result"].keys():
-                    rest_number =rest_details["result"]["formatted_phone_number"]
-                else:
-                    rest_number =  ""
-                if "website" in rest_details["result"].keys():
-                    rest_site =rest_details["result"]["website"]
-                else:
-                    rest_site = ""
-                new_rest = Restaurant(name=rest.split(",")[0], address=rest_address, website=rest_site, number=rest_number)
+            
+        rest_details = get_place_details(my_fields, restaurants)
+        if rest_details:
+            for detail in rest_details:
+                new_rest = Restaurant(name=detail[0], address=detail[1], number=detail[2], website=detail[3])
                 db.session.add(new_rest)
                 db.session.commit()
                 new_rest_iti = Itinerary_restaurant(itinerary_id=new_iti.id, rest_id=new_rest.id)
                 db.session.add(new_rest_iti)
                 db.session.commit()
-            else:
-                return 
+            
         return redirect(f"/iti/{new_iti.id}")
 
     return render_template("itinerary/new_iti.html")
