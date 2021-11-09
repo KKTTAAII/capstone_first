@@ -3,45 +3,47 @@
   <h1>{{g.user.username}}'s Trip!</h1>
   <h2>{{iti.iti_name}}</h2>
 
-<div id="date" class="mt-3 mb-3">
-  <div id="start_date"><b>Start Date:</b> {{iti.start_date}}</div>
-  <div id="end_date"><b>End Date:</b> {{iti.end_date}}</div>
-</div> 
+  <div id="date" class="mt-3 mb-3">
+    <div id="start_date"><b>Start Date:</b> {{iti.start_date}}</div>
+    <div id="end_date"><b>End Date:</b> {{iti.end_date}}</div>
+  </div>
 
   <div id="iti-table-container">
-    <table id="iti-table" class="table table-bordered">
-      <tr class="table-secondary">
-        <th colspan="2">Hotels</th>
+    <table id="iti-table" class="table">
+      <tr >
+        <th colspan="2" >Hotels</th>
       </tr>
 
       {%for hotel in iti.iti_hotels %}
-      <tr class="table-success">
+      <tr>
         <td>{{hotel.hotels.name}}</td>
         <td>
           <div>
             <p>{{hotel.hotels.address}}</p>
             {%if hotel.hotels.website%}
-            <a href="{{hotel.hotels.website}}" class="text-white"><p>{{hotel.hotels.website}}</p></a>
+            <a href="{{hotel.hotels.website}}" class="text-white"
+              ><p>{{hotel.hotels.website}}</p></a
+            >
             {%endif%} {%if hotel.hotels.number%}
             <p>{{hotel.hotels.number}}</p>
             {%endif%}
           </div>
         </td>
       </tr>
-      {%endfor%}
-
-      <tr class="table-secondary">
+      {%endfor%} {%if iti.iti_rests%}
+      <tr >
         <th colspan="2">Resturants</th>
       </tr>
-
-      {%for rest in iti.iti_rests %}
-      <tr class="table-success">
+      {%endif%} {%for rest in iti.iti_rests %}
+      <tr >
         <td>{{rest.rests.name}}</td>
         <td>
           <div>
             <p>{{rest.rests.address}}</p>
             {%if rest.rests.website%}
-            <a href="{{rest.rests.website}}" class="text-white"><p>{{rest.rests.website}}</p></a>
+            <a href="{{rest.rests.website}}" class="text-white"
+              ><p>{{rest.rests.website}}</p></a
+            >
             {%endif%} {%if rest.rests.number%}
             <p>{{rest.rests.number}}</p>
             {%endif%}

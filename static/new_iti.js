@@ -16,6 +16,7 @@ const placeType = document.getElementById("type");
 const state = document.getElementById("state");
 const searchForm = document.getElementById("search-form");
 const itiForm = document.getElementById("iti-form");
+const plantripDiv = document.getElementById("searchMsg")
 
 //validate itinerary name - cannot be blank
 itiForm.addEventListener("submit", function (e) {
@@ -193,6 +194,7 @@ async function processForm(evt) {
   let response = await getResultsByLocation(city_name, state_name, type_name);
   let data = response.data;
   handleResults(data);
+  plantripDiv.style.display = "none"
 }
 
 //clear results on the html page
@@ -200,6 +202,7 @@ function clearResults() {
   while (results.childNodes[0]) {
     results.removeChild(results.childNodes[0]);
   }
+  plantripDiv.style.display = "block"
 }
 
 searchForm.addEventListener("submit", processForm);

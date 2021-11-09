@@ -29,8 +29,6 @@
 
 #home-user, #home {
     color:rgb(255, 255, 255);
-    background-image: url("/static/pictures/brett-zeck-eyfMgGvo9PA-unsplash.jpg");
-    background-size: cover;
 }
 
 #iti-table-container{
@@ -91,5 +89,14 @@ div#listing {
     width: 300px;
     margin: 0 auto;
     height: 600px;
+}
+
+#searchMsg {
+    font-size: 3rem;
+}
+
+.holiday {
+    width: 400px;
+    height: 400px;
 }
 

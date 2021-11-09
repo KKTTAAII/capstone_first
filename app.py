@@ -1,5 +1,4 @@
 import os
-
 from flask import Flask, json, redirect, render_template, flash, session, g, request, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 from models import db, connect_db, User, Itinerary, Itinerary_hotel, Itinerary_restaurant, Hotel, Restaurant
@@ -12,8 +11,8 @@ import time
 
 
 API_KEY = ""
-#Define our Client
-gmaps = googlemaps.Client(key = API_KEY)
+# Define our Client
+gmaps = googlemaps.Client(key=API_KEY)
 
 
 app = Flask(__name__)
@@ -31,11 +30,12 @@ toolbar = DebugToolbarExtension(app)
 connect_db(app)
 db.create_all()
 
+
 def get_place_details(fields, places):
     all_places_details = []
     for place in places:
         detail_list = []
-        details = gmaps.place(place_id = place.split(",")[1], fields = fields)
+        details = gmaps.place(place_id=place.split(",")[1], fields=fields)
         place_id = place.split(",")[0]
         detail_list.append(place_id)
         if details:
@@ -55,7 +55,7 @@ def get_place_details(fields, places):
                 detail_list.append(site)
             all_places_details.append(detail_list)
         else:
-            return 
+            return
     return all_places_details
 
 
@@ -67,9 +67,11 @@ def add_user_to_g():
     else:
         g.user = None
 
+
 def do_login(user):
 
     session[CURR_USER_KEY] = user.id
+
 
 def do_logout():
 
@@ -119,7 +121,7 @@ def signup():
 
 @app.route('/login', methods=["GET", "POST"])
 def login():
-    
+
     form = LoginForm()
 
     if form.validate_on_submit():
@@ -151,7 +153,7 @@ def show_user_page(user_id):
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
-    user = g.user    
+    user = g.user
     form = LoginForm(obj=user)
     if form.validate_on_submit():
         if User.authenticate(user.username, form.password.data):
@@ -178,32 +180,51 @@ def add_new_itinerary(user_id):
         hotels = request.form.getlist("hotel")
         restaurants = request.form.getlist("restaurant")
 
-        new_iti = Itinerary(iti_name=iti_name,user_id=user_id, start_date=start_date, end_date=end_date)
+        new_iti = Itinerary(
+            iti_name=iti_name,
+            user_id=user_id,
+            start_date=start_date,
+            end_date=end_date)
         db.session.add(new_iti)
         db.session.commit()
 
-        my_fields = ['name', 'website', 'formatted_address', 'formatted_phone_number', 'rating']
+        my_fields = [
+            'name',
+            'website',
+            'formatted_address',
+            'formatted_phone_number',
+            'rating']
 
         hotel_details = get_place_details(my_fields, hotels)
         if hotel_details:
             for detail in hotel_details:
-                new_hotel = Hotel(name=detail[0], address=detail[1], number=detail[2], website=detail[3])
+                new_hotel = Hotel(
+                    name=detail[0],
+                    address=detail[1],
+                    number=detail[2],
+                    website=detail[3])
                 db.session.add(new_hotel)
                 db.session.commit()
-                new_hotel_iti = Itinerary_hotel(itinerary_id=new_iti.id, hotel_id=new_hotel.id)
+                new_hotel_iti = Itinerary_hotel(
+                    itinerary_id=new_iti.id, hotel_id=new_hotel.id)
                 db.session.add(new_hotel_iti)
                 db.session.commit()
-            
+
         rest_details = get_place_details(my_fields, restaurants)
         if rest_details:
             for detail in rest_details:
-                new_rest = Restaurant(name=detail[0], address=detail[1], number=detail[2], website=detail[3])
+                new_rest = Restaurant(
+                    name=detail[0],
+                    address=detail[1],
+                    number=detail[2],
+                    website=detail[3])
                 db.session.add(new_rest)
                 db.session.commit()
-                new_rest_iti = Itinerary_restaurant(itinerary_id=new_iti.id, rest_id=new_rest.id)
+                new_rest_iti = Itinerary_restaurant(
+                    itinerary_id=new_iti.id, rest_id=new_rest.id)
                 db.session.add(new_rest_iti)
                 db.session.commit()
-            
+
         return redirect(f"/iti/{new_iti.id}")
 
     return render_template("itinerary/new_iti.html")
@@ -220,8 +241,8 @@ def show_itinerary(iti_id):
 
     itinerary = Itinerary.query.get_or_404(iti_id)
 
-    return render_template("itinerary/iti_info.html", 
-    iti=itinerary)
+    return render_template("itinerary/iti_info.html",
+                           iti=itinerary)
 
 
 @app.route("/user/<int:user_id>/iti")
@@ -253,7 +274,7 @@ def find_places():
     type = request.args.get("type")
     state = request.args.get("state")
     result = []
-    ##get lat and lng for city and state name
+    # get lat and lng for city and state name
     locations = gmaps.geocode(address=f"{city}{state}")
     if locations:
         for location in locations:
@@ -267,27 +288,39 @@ def find_places():
             if city_name.capitalize() == city.capitalize() and state in check_state_list:
                 lat = lat
                 lng = lng
-            ###make request for all places using lat, long
-                places_result = gmaps.places_nearby(location=(lat,lng), type=type, rank_by = "distance")
+            # make request for all places using lat, long
+                places_result = gmaps.places_nearby(
+                    location=(lat, lng), type=type, rank_by="distance")
                 if(places_result["status"] == "OK"):
                     for place in places_result['results']:
                         my_place_id = place["place_id"]
-                        my_fields = ['name', 'website', 'formatted_address', 'formatted_phone_number', 'rating']
-            ###make request for details
-                        place_details = gmaps.place(place_id = my_place_id, fields = my_fields)
+                        my_fields = [
+                            'name',
+                            'website',
+                            'formatted_address',
+                            'formatted_phone_number',
+                            'rating']
+            # make request for details
+                        place_details = gmaps.place(
+                            place_id=my_place_id, fields=my_fields)
                         place_details["place_id"] = my_place_id
                         result.append(place_details)
                     return jsonify(result)
-                else: 
-                    return jsonify({"result": "Results not found. Please try again"})
-            else: 
-                return jsonify({"result": "Location not found. Please enter correct city and state."})
+                else:
+                    return jsonify(
+                        {"result": "Results not found. Please try again"})
+            else:
+                return jsonify(
+                    {"result": "Location not found. Please enter correct city and state."})
     else:
-        return jsonify({"result":"Oops, something's wrong. Please try again."})
-    
+        return jsonify(
+            {"result": "Oops, something's wrong. Please try again."})
+
+
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404
+
 
 @app.errorhandler(500)
 def page_not_found(e):
