@@ -22,19 +22,12 @@ class UserModelTestCase(TestCase):
             username="testuser",
             password="PASSWORD"
         )
-
-        u2 = User(
-            email="test2@test.com",
-            username="testuser2",
-            password="PASSWORD2"
-        )
-
-        db.session.add_all([u1,u2])
+        
+        db.session.add(u1)
         db.session.commit()
 
         self.u1 = u1
-        self.u2 = u2
-
+    
         self.client = app.test_client()
 
     def tearDown(self):
@@ -45,7 +38,7 @@ class UserModelTestCase(TestCase):
 
     #######Test create user#######
 
-    def test_user_model(self):
+    def test_create_user(self):
         """Test that user data is in database"""
         self.assertEqual(self.u1.username, "testuser")
         self.assertEqual(self.u1.email, "test@test.com")
@@ -76,3 +69,8 @@ class UserModelTestCase(TestCase):
         db.session.commit()
         test_auth = User.authenticate("testuser3", "sjgfohnofdhn")
         self.assertFalse(test_auth)
+
+   
+        
+    
+    
