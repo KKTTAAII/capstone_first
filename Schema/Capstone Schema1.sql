@@ -1,11 +1,17 @@
 ﻿CREATE TABLE "hotel" (
     "id" PRIMARY KEY,
-    "api_info" TEXT   NOT NULL
+    "name" TEXT   NOT NULL,
+    "address" TEXT   NOT NULL,
+    "website" TEXT   NOT NULL,
+    "number" TEXT   NOT NULL,
 );
 
 CREATE TABLE "restaurant" (
     "id" PRIMARY KEY,
-    "api_info" TEXT   NOT NULL
+    "name" TEXT   NOT NULL,
+    "address" TEXT   NOT NULL,
+    "website" TEXT   NOT NULL,
+    "number" TEXT   NOT NULL,
 );
 
 CREATE TABLE "user" (
@@ -18,27 +24,21 @@ CREATE TABLE "user" (
 CREATE TABLE "itinerary" (
     "id" PRIMARY KEY,
     "user_id" INT NOT NULL,
-    "start_date" DATE,
-    "end_date" DATE 
+    "name" TEXT,
+    "start_date" DATE NOT NULL,
+    "end_date" DATE NOT NULL
 );
 
 CREATE TABLE "itinerary_hotel" (
-    "itinerary_id" PRIMARY  KEY,
-    "hotel_id" PRIMARY KEY
+    "id" PRIMARY KEY,
+    "itinerary_id" INT NOT NULL,
+    "hotel_id" INT NOT NULL
 );
 
 CREATE TABLE "itinerary_rest" (
-    "itinerary_id" PRIMARY  KEY,
-    "rest_id" PRIMARY  KEY
+    "id" PRIMARY KEY,
+    "itinerary_id" INT NOT NULL,
+    "rest_id" INT NOT NULL
 );
 
-CREATE TABLE "fav_hotel" (
-    "fav_id" PRIMARY  KEY,
-    "hotel_id" PRIMARY  KEY
-);
-
-CREATE TABLE "fav_rest" (
-    "fav_id" PRIMARY  KEY,
-    "rest_id" PRIMARY  KEY
-);
 

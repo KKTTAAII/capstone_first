@@ -70,8 +70,9 @@ class Itinerary_hotel(db.Model):
 
     __tablename__ = "itinerary_hotels"
 
-    itinerary_id = db.Column(db.Integer, db.ForeignKey("itineraries.id", ondelete="cascade"), nullable=False, primary_key=True)
-    hotel_id = db.Column(db.Integer, db.ForeignKey("hotels.id", ondelete="cascade"), nullable=False, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    itinerary_id = db.Column(db.Integer, db.ForeignKey("itineraries.id", ondelete="cascade"), nullable=False)
+    hotel_id = db.Column(db.Integer, db.ForeignKey("hotels.id", ondelete="cascade"), nullable=False)
 
     hotels = db.relationship('Hotel', backref='iti_hotel')
 
@@ -82,8 +83,9 @@ class Itinerary_restaurant(db.Model):
 
     __tablename__ = "itinerary_restaurants"
 
-    itinerary_id = db.Column(db.Integer, db.ForeignKey("itineraries.id", ondelete="cascade"), nullable=False, primary_key=True)
-    rest_id = db.Column(db.Integer, db.ForeignKey("restaurants.id", ondelete="cascade"), nullable=False, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    itinerary_id = db.Column(db.Integer, db.ForeignKey("itineraries.id", ondelete="cascade"), nullable=False)
+    rest_id = db.Column(db.Integer, db.ForeignKey("restaurants.id", ondelete="cascade"), nullable=False)
 
     rests = db.relationship('Restaurant', backref='iti_rest')
 
