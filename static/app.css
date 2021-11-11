@@ -15,7 +15,7 @@
     height: 100%;
 }
 
-#addHotelBtn, #addRestBtn, #hotel_div, #rest_div {
+.addHotelBtn, .addRestBtn, .hotel_div, .rest_div {
     display: none;
 }
 
@@ -27,8 +27,9 @@
     display: none;
 }
 
-#home-user, #home {
+.home-user, .home {
     color:rgb(255, 255, 255);
+    height: 700px;
 }
 
 #iti-table-container{
@@ -45,16 +46,12 @@
     justify-content: center;
 }
 
-#start_date, #end_date {
-    margin-left: 15px;
-}
-
 .card {
     width: 500px;
     margin: 0 auto;
 }
 
-#errorpic404, #errorpic500 {
+.errorpic404, .errorpic500 {
     height: 300px;
 }
 
@@ -77,15 +74,12 @@ div#listing {
     width: inherit;
 }
 
-#home, #home-user {
-    height: 700px;
-}
 
 .error {
     color: rgb(228, 148, 148);
 }
 
-#signupForm, #loginForm {
+.signupForm, .loginForm {
     width: 300px;
     margin: 0 auto;
     height: 600px;

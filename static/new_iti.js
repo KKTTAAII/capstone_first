@@ -1,9 +1,9 @@
 /////////////// handle itinerary creation form //////////////
 
-const hotelInputDiv = document.getElementById("hotel_div");
-const restInputDiv = document.getElementById("rest_div");
-const addHotelBtn = document.getElementById("addHotelBtn");
-const addRestBtn = document.getElementById("addRestBtn");
+const hotelInputDiv = document.getElementsByClassName("hotel_div")[0];
+const restInputDiv = document.getElementsByClassName("rest_div")[0];
+const addHotelBtn = document.getElementsByClassName("addHotelBtn")[0];
+const addRestBtn = document.getElementsByClassName("addRestBtn")[0];
 const startDate = document.getElementsByName("start_date")[0];
 const endDate = document.getElementsByName("end_date")[0];
 const results = document.getElementById("results");
