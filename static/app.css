@@ -97,3 +97,7 @@ div#listing {
 .show {
     display: block;
 }
+
+#planTripImg {
+    font-size: 2rem;
+}

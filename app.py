@@ -276,7 +276,6 @@ def find_places():
     city = request.args.get("city")
     type = request.args.get("type")
     state = request.args.get("state")
-    all_locations = []
     check_state_list = []
     city_name = ""
     lat = ""
@@ -284,23 +283,22 @@ def find_places():
     places_results = ""
     response = []
     # get lat and lng for city and state name
-    locations = gmaps.geocode(address=f"{city}{state}")
-    if locations:
-        for location in locations:
-            city = location["address_components"][0]["long_name"]
-            all_locations.append(location)
-            city_name = city
-            lat = location["geometry"]["location"]["lat"]
-            lng = location["geometry"]["location"]["lng"]
-            lat = lat
-            lng = lng
-            for obj in location["address_components"]:
-                name = obj["short_name"]
-                check_state_list.append(name)
+    location = gmaps.geocode(address=f"{city}{state}")
+    if location:
+        city = location[0]["address_components"][0]["long_name"]
+        city_name = city
+        lat = location[0]["geometry"]["location"]["lat"]
+        lng = location[0]["geometry"]["location"]["lng"]
+        lat = lat
+        lng = lng
+        for obj in location[0]["address_components"]:
+            name = obj["short_name"]
+            check_state_list.append(name)
     else:
         return jsonify(
             {"result": errors["err1"]})
 
+    # check that there is a city in that state
     if city_name.capitalize() == city.capitalize() and state in check_state_list:
         result = gmaps.places_nearby(
             location=(
@@ -313,6 +311,7 @@ def find_places():
         return jsonify(
             {"result": errors["err2"]})
 
+    # get place details
     if(places_results["status"] == "OK"):
         for place in places_results['results']:
             my_place_id = place["place_id"]

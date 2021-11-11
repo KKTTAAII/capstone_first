@@ -1,9 +1,9 @@
 /////////////// handle itinerary creation form //////////////
 
-const hotelInputDiv = document.getElementsByClassName("hotel_div")[0];
-const restInputDiv = document.getElementsByClassName("rest_div")[0];
-const addHotelBtn = document.getElementsByClassName("addHotelBtn")[0];
-const addRestBtn = document.getElementsByClassName("addRestBtn")[0];
+const hotelInputDiv = document.querySelector(".hotel_div");
+const restInputDiv = document.querySelector(".rest_div");
+const addHotelBtn = document.querySelector(".addHotelBtn");
+const addRestBtn = document.querySelector(".addRestBtn");
 const startDate = document.getElementsByName("start_date")[0];
 const endDate = document.getElementsByName("end_date")[0];
 const results = document.getElementById("results");
@@ -185,6 +185,9 @@ function handleResults(data) {
 //extract user input from search form and send to BE
 async function processForm(evt) {
   evt.preventDefault();
+  if(city.value === ""){
+    Swal.fire("Please fill in the city name");
+  }
   const type_name = placeType.value;
   const city_name = city.value;
   const state_name = state.value;
