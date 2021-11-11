@@ -1,19 +1,17 @@
 import os
-from flask import Flask, json, redirect, render_template, flash, session, g, request, jsonify
+from flask import Flask, redirect, render_template, flash, session, g, request, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 from models import db, connect_db, User, Itinerary, Itinerary_hotel, Itinerary_restaurant, Hotel, Restaurant
 from forms import SignupForm, LoginForm
 from sqlalchemy.exc import IntegrityError
-import requests
 import googlemaps
-import pprint
-import time
+from dotenv import load_dotenv
 
+load_dotenv()
 
-API_KEY = ""
+API_KEY = os.getenv("API_KEY")
 # Define our Client
 gmaps = googlemaps.Client(key=API_KEY)
-
 
 app = Flask(__name__)
 CURR_USER_KEY = "curr_user"
