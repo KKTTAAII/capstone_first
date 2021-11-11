@@ -20,6 +20,12 @@ my_fields = [
     'formatted_phone_number',
     'rating']
 
+errors = {
+    "err1": "Oops, something's wrong. Please try again.",
+    "err2": "Location not found. Please enter correct city and state.",
+    "err3": "Results not found. Please try again"
+}
+
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = (
@@ -293,7 +299,7 @@ def find_places():
                 check_state_list.append(name)
     else:
         return jsonify(
-            {"result": "Oops, something's wrong. Please try again."})
+            {"result": errors["err1"]})
 
     if city_name.capitalize() == city.capitalize() and state in check_state_list:
         result = gmaps.places_nearby(
@@ -305,7 +311,7 @@ def find_places():
         places_results = result
     else:
         return jsonify(
-            {"result": "Location not found. Please enter correct city and state."})
+            {"result": errors["err2"]})
 
     if(places_results["status"] == "OK"):
         for place in places_results['results']:
@@ -316,7 +322,7 @@ def find_places():
             response.append(place_details)
         return jsonify(response)
     else:
-        return jsonify({"result": "Results not found. Please try again"})
+        return jsonify({"result": errors["err3"]})
 
 
 @app.errorhandler(404)
