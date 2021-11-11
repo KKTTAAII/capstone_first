@@ -1,9 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, TextAreaField, SubmitField
-from wtforms.validators import InputRequired, Email, Length, ValidationError
-from wtforms.fields.html5 import DateField
-from models import Restaurant, db, User
-
+from wtforms import StringField, PasswordField
+from wtforms.validators import InputRequired, Email, Length
 
 class SignupForm(FlaskForm):
     username = StringField("Username", validators=[InputRequired(message="Username can't be blank")])

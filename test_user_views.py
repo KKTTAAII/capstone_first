@@ -1,8 +1,6 @@
 import os
 from unittest import TestCase
-from forms import LoginForm
 from models import db, User
-import json
 
 os.environ['DATABASE_URL'] = "postgresql:///itinerary_test"
 

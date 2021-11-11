@@ -15,6 +15,12 @@ gmaps = googlemaps.Client(key=API_KEY)
 
 app = Flask(__name__)
 CURR_USER_KEY = "curr_user"
+my_fields = [
+            'name',
+            'website',
+            'formatted_address',
+            'formatted_phone_number',
+            'rating']
 
 app.config['SQLALCHEMY_DATABASE_URI'] = (
     os.environ.get('DATABASE_URL', 'postgresql:///user_itinerary'))
@@ -83,9 +89,9 @@ def do_logout():
 @app.route("/")
 def home_page():
     if g.user:
-        return render_template("home-user.html")
+        return render_template("home/home-user.html")
     else:
-        return render_template("home.html")
+        return render_template("home/home.html")
 
 
 ###########signup, login, logout routes##############
@@ -165,7 +171,8 @@ def show_user_page(user_id):
 
 @app.route("/user/<int:user_id>/newiti", methods=["GET", "POST"])
 def add_new_itinerary(user_id):
-    if not g.user:
+    print(f"**********************{g.user.id}********************************")
+    if not g.user or g.user.id != user_id:
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
@@ -185,13 +192,6 @@ def add_new_itinerary(user_id):
             end_date=end_date)
         db.session.add(new_iti)
         db.session.commit()
-
-        my_fields = [
-            'name',
-            'website',
-            'formatted_address',
-            'formatted_phone_number',
-            'rating']
 
         hotel_details = get_place_details(my_fields, hotels)
         if hotel_details:
@@ -292,12 +292,6 @@ def find_places():
                 if(places_result["status"] == "OK"):
                     for place in places_result['results']:
                         my_place_id = place["place_id"]
-                        my_fields = [
-                            'name',
-                            'website',
-                            'formatted_address',
-                            'formatted_phone_number',
-                            'rating']
             # make request for details
                         place_details = gmaps.place(
                             place_id=my_place_id, fields=my_fields)
@@ -317,9 +311,9 @@ def find_places():
 
 @app.errorhandler(404)
 def page_not_found(e):
-    return render_template('404.html'), 404
+    return render_template('errors/404.html'), 404
 
 
 @app.errorhandler(500)
 def page_not_found(e):
-    return render_template('500.html'), 500
+    return render_template('errors/500.html'), 500

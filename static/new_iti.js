@@ -17,31 +17,28 @@ const state = document.getElementById("state");
 const searchForm = document.getElementById("search-form");
 const itiForm = document.getElementById("iti-form");
 const plantripDiv = document.getElementById("planTripImg");
+const errors = {
+  err1: "Name can't be blank",
+  err2: "Please select start date",
+  err3: "Please select end date",
+};
 
-//validate itinerary name - cannot be blank
+function validateField(field, errId, fieldName, errMsg, event) {
+  if (field === "") {
+    event.preventDefault();
+    const err = document.getElementById(errId);
+    const input = document.getElementsByName(fieldName)[0];
+    input.focus();
+    err.innerHTML = errMsg;
+  }
+}
+
+//validate itinerary form 
 itiForm.addEventListener("submit", function (e) {
   const itiname = document.getElementsByName("iti-name")[0].value;
-  if (itiname === "") {
-    e.preventDefault();
-    const err = document.getElementById("name-error");
-    const nameInput = document.getElementsByName("iti-name")[0];
-    nameInput.focus();
-    err.innerHTML = "Name can't be blank";
-  }
-  if (startDate.value === "") {
-    e.preventDefault();
-    const err = document.getElementById("start-date-error");
-    const startDateInput = document.getElementsByName("start_date")[0];
-    startDateInput.focus();
-    err.innerHTML = "Please select start date";
-  }
-  if (endDate.value === "") {
-    e.preventDefault();
-    const err = document.getElementById("end-date-error");
-    const endtDateInput = document.getElementsByName("end_date")[0];
-    endtDateInput.focus();
-    err.innerHTML = "Please select end date";
-  }
+  validateField(itiname, "name-error", "iti-name", errors["err1"], e);
+  validateField(startDate.value, "start-date-error", "start_date", errors["err2"], e);
+  validateField(endDate.value, "end-date-error", "end_date", errors["err3"], e);
 });
 
 // Ensure that the start date is not before the current date
@@ -63,13 +60,13 @@ results.addEventListener(
   function () {
     let type = document.getElementById("type").value;
     if (type === "lodging") {
-      addHotelBtn.style.display = "block";
-      hotelInputDiv.style.display = "block";
+      addHotelBtn.classList.add("show");
+      hotelInputDiv.classList.add("show");
       getPlaceNames(hotelNames);
       createOptions("hotel", hotelInputDiv, hotelNames, newHotelSelect);
     } else if (type === "restaurant") {
-      addRestBtn.style.display = "block";
-      restInputDiv.style.display = "block";
+      addRestBtn.classList.add("show");
+      restInputDiv.classList.add("show");
       getPlaceNames(restNames);
       createOptions("restaurant", restInputDiv, restNames, newRestSelect);
     }
@@ -194,7 +191,7 @@ async function processForm(evt) {
   let response = await getResultsByLocation(city_name, state_name, type_name);
   let data = response.data;
   handleResults(data);
-  plantripDiv.classList.add("hide")
+  plantripDiv.classList.add("hide");
 }
 
 //clear results on the html page
@@ -202,7 +199,7 @@ function clearResults() {
   while (results.childNodes[0]) {
     results.removeChild(results.childNodes[0]);
   }
-  plantripDiv.classList.remove("hide")
+  plantripDiv.classList.remove("hide");
 }
 
 searchForm.addEventListener("submit", processForm);

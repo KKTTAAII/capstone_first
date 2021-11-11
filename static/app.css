@@ -94,3 +94,6 @@ div#listing {
     display: none;
 }
 
+.show {
+    display: block;
+}
