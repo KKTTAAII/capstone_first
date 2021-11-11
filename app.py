@@ -12,15 +12,15 @@ load_dotenv()
 API_KEY = os.getenv("API_KEY")
 # Define our Client
 gmaps = googlemaps.Client(key=API_KEY)
-
-app = Flask(__name__)
 CURR_USER_KEY = "curr_user"
 my_fields = [
-            'name',
-            'website',
-            'formatted_address',
-            'formatted_phone_number',
-            'rating']
+    'name',
+    'website',
+    'formatted_address',
+    'formatted_phone_number',
+    'rating']
+
+app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = (
     os.environ.get('DATABASE_URL', 'postgresql:///user_itinerary'))
@@ -171,7 +171,6 @@ def show_user_page(user_id):
 
 @app.route("/user/<int:user_id>/newiti", methods=["GET", "POST"])
 def add_new_itinerary(user_id):
-    print(f"**********************{g.user.id}********************************")
     if not g.user or g.user.id != user_id:
         flash("Access unauthorized.", "danger")
         return redirect("/")
@@ -245,7 +244,7 @@ def show_itinerary(iti_id):
 
 @app.route("/user/<int:user_id>/iti")
 def show_all_itineraries(user_id):
-    if not g.user:
+    if not g.user or g.user.id != user_id:
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
@@ -271,42 +270,53 @@ def find_places():
     city = request.args.get("city")
     type = request.args.get("type")
     state = request.args.get("state")
-    result = []
+    all_locations = []
+    check_state_list = []
+    city_name = ""
+    lat = ""
+    lng = ""
+    places_results = ""
+    response = []
     # get lat and lng for city and state name
     locations = gmaps.geocode(address=f"{city}{state}")
     if locations:
         for location in locations:
-            check_state_list = []
-            city_name = location["address_components"][0]["long_name"]
+            city = location["address_components"][0]["long_name"]
+            all_locations.append(location)
+            city_name = city
+            lat = location["geometry"]["location"]["lat"]
+            lng = location["geometry"]["location"]["lng"]
+            lat = lat
+            lng = lng
             for obj in location["address_components"]:
                 name = obj["short_name"]
                 check_state_list.append(name)
-            lat = location["geometry"]["location"]["lat"]
-            lng = location["geometry"]["location"]["lng"]
-            if city_name.capitalize() == city.capitalize() and state in check_state_list:
-                lat = lat
-                lng = lng
-            # make request for all places using lat, long
-                places_result = gmaps.places_nearby(
-                    location=(lat, lng), type=type, rank_by="distance")
-                if(places_result["status"] == "OK"):
-                    for place in places_result['results']:
-                        my_place_id = place["place_id"]
-            # make request for details
-                        place_details = gmaps.place(
-                            place_id=my_place_id, fields=my_fields)
-                        place_details["place_id"] = my_place_id
-                        result.append(place_details)
-                    return jsonify(result)
-                else:
-                    return jsonify(
-                        {"result": "Results not found. Please try again"})
-            else:
-                return jsonify(
-                    {"result": "Location not found. Please enter correct city and state."})
     else:
         return jsonify(
             {"result": "Oops, something's wrong. Please try again."})
+
+    if city_name.capitalize() == city.capitalize() and state in check_state_list:
+        result = gmaps.places_nearby(
+            location=(
+                lat,
+                lng),
+            type=type,
+            rank_by="distance")
+        places_results = result
+    else:
+        return jsonify(
+            {"result": "Location not found. Please enter correct city and state."})
+
+    if(places_results["status"] == "OK"):
+        for place in places_results['results']:
+            my_place_id = place["place_id"]
+            place_details = gmaps.place(
+                place_id=my_place_id, fields=my_fields)
+            place_details["place_id"] = my_place_id
+            response.append(place_details)
+        return jsonify(response)
+    else:
+        return jsonify({"result": "Results not found. Please try again"})
 
 
 @app.errorhandler(404)
