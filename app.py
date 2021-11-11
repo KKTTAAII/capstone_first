@@ -45,21 +45,21 @@ def get_place_details(fields, places):
         if details:
             address = details["result"]["formatted_address"]
             detail_list.append(address)
-            if "formatted_phone_number" in details["result"].keys():
-                number = details["result"]["formatted_phone_number"]
-                detail_list.append(number)
-            else:
-                number = ""
-                detail_list.append(number)
-            if "website" in details["result"].keys():
-                site = details["result"]["website"]
-                detail_list.append(site)
-            else:
-                site = ""
-                detail_list.append(site)
-            all_places_details.append(detail_list)
         else:
             return
+        if details and "formatted_phone_number" in details["result"].keys():
+            number = details["result"]["formatted_phone_number"]
+            detail_list.append(number)
+        else:
+            number = ""
+            detail_list.append(number)
+        if details and "website" in details["result"].keys():
+            site = details["result"]["website"]
+            detail_list.append(site)
+        else:
+            site = ""
+            detail_list.append(site)
+        all_places_details.append(detail_list)
     return all_places_details
 
 
@@ -228,7 +228,7 @@ def add_new_itinerary(user_id):
     return render_template("itinerary/new_iti.html")
 
 
-###########Itinerary routes########
+###########Itinerary routes###########
 
 
 @app.route("/iti/<int:iti_id>")
