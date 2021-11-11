@@ -23,10 +23,6 @@
     display: block;
 }
 
-#update-user {
-    display: none;
-}
-
 .home-user, .home {
     color:rgb(255, 255, 255);
     height: 700px;
@@ -92,5 +88,9 @@ div#listing {
 .holiday {
     width: 400px;
     height: 400px;
+}
+
+.hide {
+    display: none;
 }
 
