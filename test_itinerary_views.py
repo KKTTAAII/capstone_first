@@ -110,3 +110,20 @@ class ItineraryViewTestCase(TestCase):
             resp = c.get(f"/user/{self.u1.id}/newiti", follow_redirects=True)
             html = resp.get_data(as_text=True)
             self.assertIn("Access unauthorized.", html)
+
+    def test_create_itinerary_plan(self):
+        """Test create Itinerary"""
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess[CURR_USER_KEY] = self.u1.id 
+
+            data = {
+                "hotel": [["The Stanley Hotel,ChIJNeya8fNlaYcRiIZjupMfjgY"]],
+                "restaurant": [["Cascades Restaurant,ChIJL3e6rfNlaYcR_j8PonDqxlk"]],
+                "iti_name": "Estes Park 2021",
+                "start_date": "2021-11-16",
+                "end_date": "2021-11-18"
+            }
+            resp = c.post(f"/user/{self.u1.id}/newiti", data=data, follow_redirects=True)
+            html = resp.get_data(as_text=True)
+            self.assertIn(f"{self.u1.username}'s Trip!", html)

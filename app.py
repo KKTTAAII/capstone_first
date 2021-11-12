@@ -197,7 +197,7 @@ def add_new_itinerary(user_id):
             end_date=end_date)
         db.session.add(new_iti)
         db.session.commit()
-
+        
         hotel_details = get_place_details(my_fields, hotels)
         if hotel_details:
             for detail in hotel_details:

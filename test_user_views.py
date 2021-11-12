@@ -68,7 +68,17 @@ class UserViewTestCase(TestCase):
             self.assertEqual(resp.status_code, 200)
             self.assertIn("Access unauthorized.", html)
 
-    
+    def test_update_user_name(self):
+        """Test if the username is updated"""
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess[CURR_USER_KEY] = self.testuser.id
+
+            with app.app_context():
+                resp = c.post(f"/user/{self.testuser.id}", data={"username": "evie", "password":"testuser"}, follow_redirects=True)
+                html = resp.get_data(as_text=True)
+                self.assertEqual(resp.status_code, 200)
+                self.assertIn("evie", html)
           
 
    

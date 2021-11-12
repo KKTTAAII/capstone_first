@@ -187,6 +187,7 @@ async function processForm(evt) {
   evt.preventDefault();
   if(city.value === ""){
     Swal.fire("Please fill in the city name");
+    return;
   }
   const type_name = placeType.value;
   const city_name = city.value;
