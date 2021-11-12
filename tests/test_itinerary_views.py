@@ -1,5 +1,4 @@
 import os
-from pprint import pprint
 from unittest import TestCase
 from models import db, User, Hotel, Restaurant, Itinerary_restaurant, Itinerary_hotel, Itinerary
 

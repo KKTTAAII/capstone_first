@@ -6,6 +6,7 @@ from forms import SignupForm, LoginForm
 from sqlalchemy.exc import IntegrityError
 import googlemaps
 from dotenv import load_dotenv
+import pprint
 
 load_dotenv()
 
@@ -39,6 +40,27 @@ toolbar = DebugToolbarExtension(app)
 
 connect_db(app)
 db.create_all()
+
+def save_to_database(details, type, iti_type, iti_id):
+    if details:
+            for detail in details:
+                new_place = type(
+                    name=detail[0],
+                    address=detail[1],
+                    number=detail[2],
+                    website=detail[3])
+                db.session.add(new_place)
+                db.session.commit()
+                if type == Hotel:
+                    new_iti_place = iti_type(
+                    itinerary_id=iti_id, hotel_id=new_place.id)
+                    db.session.add(new_iti_place)
+                    db.session.commit()
+                elif type == Restaurant:
+                    new_iti_place = iti_type(
+                    itinerary_id=iti_id, rest_id=new_place.id)
+                    db.session.add(new_iti_place)
+                    db.session.commit()
 
 
 def get_place_details(fields, places):
@@ -199,34 +221,10 @@ def add_new_itinerary(user_id):
         db.session.commit()
         
         hotel_details = get_place_details(my_fields, hotels)
-        if hotel_details:
-            for detail in hotel_details:
-                new_hotel = Hotel(
-                    name=detail[0],
-                    address=detail[1],
-                    number=detail[2],
-                    website=detail[3])
-                db.session.add(new_hotel)
-                db.session.commit()
-                new_hotel_iti = Itinerary_hotel(
-                    itinerary_id=new_iti.id, hotel_id=new_hotel.id)
-                db.session.add(new_hotel_iti)
-                db.session.commit()
+        save_to_database(hotel_details, Hotel, Itinerary_hotel, new_iti.id)
 
         rest_details = get_place_details(my_fields, restaurants)
-        if rest_details:
-            for detail in rest_details:
-                new_rest = Restaurant(
-                    name=detail[0],
-                    address=detail[1],
-                    number=detail[2],
-                    website=detail[3])
-                db.session.add(new_rest)
-                db.session.commit()
-                new_rest_iti = Itinerary_restaurant(
-                    itinerary_id=new_iti.id, rest_id=new_rest.id)
-                db.session.add(new_rest_iti)
-                db.session.commit()
+        save_to_database(rest_details, Restaurant, Itinerary_restaurant, new_iti.id)
 
         return redirect(f"/iti/{new_iti.id}")
 
