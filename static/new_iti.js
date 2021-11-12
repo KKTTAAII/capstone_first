@@ -170,13 +170,20 @@ function handleResults(data) {
     if (data[i]["result"]["rating"]) {
       const rating = document.createElement("span");
       for (let i = 0; i < 5; i++) {
+        console.log(data[i]["result"]["rating"])
+        console.log(data[i]["result"])
+        console.log(i)
         if (data[i]["result"]["rating"] < i + 0.5) {
+          console.log(i)
           rating.innerHTML += "&#10025;";
         } else {
           rating.innerHTML += "&#10029;";
         }
         infoDiv.append(rating);
       }
+    }
+    else{
+      console.log("there is no data")
     }
     results.appendChild(tr);
   }

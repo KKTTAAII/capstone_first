@@ -313,6 +313,7 @@ def find_places():
 
     # get place details
     if(places_results["status"] == "OK"):
+        print(places_results)
         for place in places_results['results']:
             my_place_id = place["place_id"]
             place_details = gmaps.place(
@@ -327,7 +328,6 @@ def find_places():
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('errors/404.html'), 404
-
 
 @app.errorhandler(500)
 def page_not_found(e):
