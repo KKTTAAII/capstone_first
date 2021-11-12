@@ -313,7 +313,6 @@ def find_places():
 
     # get place details
     if(places_results["status"] == "OK"):
-        print(places_results)
         for place in places_results['results']:
             my_place_id = place["place_id"]
             place_details = gmaps.place(

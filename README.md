@@ -29,5 +29,14 @@ The user can create an itinerary by naming the trip, select start date and end d
 
 [Google Places API](https://developers.google.com/maps/documentation/places/web-service/overview).
 
+## Technologies used
+- Python
+- JavaScript
+- HTML
+- CSS
+- SQLAlchemy
+- Postgres
+- Flask
+
 
 
