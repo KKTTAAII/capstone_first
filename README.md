@@ -1,6 +1,4 @@
-# 1st Capstone Project
-
-## The Concierge: 
+## The Concierge
 
 
 The Concierge is the app that a user can sign up to create an itinerary for their trip. The user can search hotels or restaurants by putting in the names of the city and the state. Once the user submits the city and the state, a list of hotels/restaurants will show up with names, addresses, websites, phone numbers, and ratings (however, some places may not have all of the information).
@@ -38,5 +36,36 @@ The user can create an itinerary by naming the trip, select start date and end d
 - Postgres
 - Flask
 
+## Try the code on your local machine
+1. clone the repo
+   
+        $ git clone  https://github.com/KKTTAAII/capstone_first.git
+2. set up environment
+   
+        $ python3 -m venv venv
+
+3. insall requirements
+
+        $ pip3 install -r requirements.txt
+
+4. activate the environment
+
+        $ source venv/bin/activate
+
+5. you can create your own API Key here
+
+    [Google Places API KEY](https://mapsplatform.google.com/)
+
+6. create database
+
+          $ createdb user_itinerary
+
+7. create tables
+
+          $ ipython
+          In [1]: %run app.py
+
+8. Enjoy the code!
 
 
+Author: [Boonyawee P.](https://www.linkedin.com/in/boonyawee-prasertsiripond/)
