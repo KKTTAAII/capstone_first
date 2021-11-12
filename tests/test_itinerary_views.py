@@ -1,4 +1,5 @@
 import os
+from pprint import pprint
 from unittest import TestCase
 from models import db, User, Hotel, Restaurant, Itinerary_restaurant, Itinerary_hotel, Itinerary
 
@@ -242,5 +243,32 @@ class ItineraryViewTestCase(TestCase):
             html = resp.get_data(as_text=True)
             self.assertIn(f"{self.u1.username}'s Trip!", html)
 
-    
-    
+    def test_delete_itinerary(self):
+        """Test delete itinerary"""
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess[CURR_USER_KEY] = self.u1.id 
+
+            mock_iti = Itinerary(
+            user_id = self.u1.id,
+            iti_name = "vail",
+            start_date = "2021-11-20",
+            end_date = "2021-11-21"
+            )
+
+            db.session.add(mock_iti)
+            db.session.commit()
+            resp = c.post(f"/iti/{mock_iti.id}/delete", follow_redirects=True)
+            self.assertEqual(Itinerary.query.get(mock_iti.id), None)
+            self.assertEqual(len(Itinerary.query.all()), 1)
+        
+    def test_show_iti_info(self):
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess[CURR_USER_KEY] = self.u1.id 
+            
+            resp = c.get(f"/iti/1")
+            html = resp.get_data(as_text=True)
+            self.assertIn("Gravity Haus", html)
+            self.assertIn("Cabin Juice", html)
+        
