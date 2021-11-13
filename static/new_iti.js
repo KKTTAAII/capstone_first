@@ -24,6 +24,37 @@ const errors = {
   err3: "Please select end date",
 };
 
+
+// get place names to make drop down options in itinerary form
+function getPlaceNames(placeName) {
+  for (let i = 0; i < results.childNodes.length; i++) {
+    let nameId = {};
+    let name = results.childNodes[i].firstChild.innerText;
+    let id = results.childNodes[i].firstChild.id;
+    nameId["name"] = name;
+    nameId["id"] = id;
+    placeName.push(nameId);
+  }
+}
+
+//create drop down options from the results (names of places)
+function createOptions(placeType, inputDiv, names, selectTag) {
+  let option = document.createElement("option");
+  if (results.childNodes[0]) {
+    selectTag.name = placeType;
+    selectTag.id = placeType;
+    selectTag.className = "form-select mb-2";
+
+    for (let i = 0; i < names.length; i++) {
+      option.value = [names[i]["name"], names[i]["id"]];
+      option.text = names[i]["name"];
+      selectTag.appendChild(option);
+    }
+    inputDiv.appendChild(selectTag);
+  }
+  return;
+}
+
 function validateField(field, errId, fieldName, errMsg, event) {
   if (field === "") {
     event.preventDefault();
@@ -92,36 +123,6 @@ addRestBtn.addEventListener("click", function () {
   const clone = newRestSelect.cloneNode(true);
   restInputDiv.appendChild(clone);
 });
-
-// get place names to make drop down options in itinerary form
-function getPlaceNames(placeName) {
-  for (let i = 0; i < results.childNodes.length; i++) {
-    let nameId = {};
-    let name = results.childNodes[i].firstChild.innerText;
-    let id = results.childNodes[i].firstChild.id;
-    nameId["name"] = name;
-    nameId["id"] = id;
-    placeName.push(nameId);
-  }
-}
-
-//create drop down options from the results (names of places)
-function createOptions(placeType, inputDiv, names, selectTag) {
-  let option = document.createElement("option");
-  if (results.childNodes[0]) {
-    selectTag.name = placeType;
-    selectTag.id = placeType;
-    selectTag.className = "form-select mb-2";
-
-    for (let i = 0; i < names.length; i++) {
-      option.value = [names[i]["name"], names[i]["id"]];
-      option.text = names[i]["name"];
-      selectTag.appendChild(option);
-    }
-    inputDiv.appendChild(selectTag);
-  }
-  return;
-}
 
 ////////////// handle Search box and display results in a table///////////////
 
