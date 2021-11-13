@@ -99,8 +99,13 @@
         </table>
         <div id="planTripImg" class="text-center">
           <div class="planTrip">Plan your trip</div>
-          <img src="/static/assets/—Pngtree—beach travel 3d elements_5356937.png" alt="holiday" class="holiday">
+          <img
+            src="/static/assets/—Pngtree—beach travel 3d elements_5356937.png"
+            alt="holiday"
+            class="holiday"
+          />
         </div>
+        <div class="loader hide text-center">Please wait...</div>
       </div>
     </div>
 
@@ -113,30 +118,18 @@
           <form method="POST" id="iti-form">
             <div id="iti-name">
               <label for="iti-name" class="form-label">Itinerary Name</label>
-              <input
-                type="text"
-                name="iti-name"
-                class="form-control"
-              />
+              <input type="text" name="iti-name" class="form-control" />
               <small id="name-error" class="error ml-0"></small>
             </div>
             <div id="start_date_div">
               <label for="start_date" class="form-label">Start Date</label>
-              <input
-                type="date"
-                name="start_date"
-                class="form-control"
-              />
+              <input type="date" name="start_date" class="form-control" />
               <small id="start-date-error" class="error ml-0"></small>
             </div>
 
             <div id="end_date_div">
               <label for="end_date">End Date</label>
-              <input
-                type="date"
-                name="end_date"
-                class="form-control"
-              />
+              <input type="date" name="end_date" class="form-control" />
               <small id="end-date-error" class="error ml-0"></small>
             </div>
 
@@ -144,26 +137,25 @@
               <label for="hotel" class="form-label">Hotel</label>
             </div>
 
-              <button
-                type="button"
-                class="addHotelBtn btn btn-primary btn-sm btn-block"
-              >
-                +
-              </button>
-  
+            <button
+              type="button"
+              class="addHotelBtn btn btn-primary btn-sm btn-block"
+            >
+              +
+            </button>
 
             <div class="rest_div">
               <label for="restaurant" class="form-label">Restaurant</label>
             </div>
 
             <br />
-    
-              <button
-                type="button"
-                class="addRestBtn btn btn-primary btn-sm btn-block"
-              >
-                +
-              </button>
+
+            <button
+              type="button"
+              class="addRestBtn btn btn-primary btn-sm btn-block"
+            >
+              +
+            </button>
 
             <br />
             <br />

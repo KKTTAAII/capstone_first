@@ -6,10 +6,10 @@ from forms import SignupForm, LoginForm
 from sqlalchemy.exc import IntegrityError
 import googlemaps
 from dotenv import load_dotenv
-import pprint
 
 load_dotenv()
 
+app = Flask(__name__)
 API_KEY = os.getenv("API_KEY")
 # Define our Client
 gmaps = googlemaps.Client(key=API_KEY)
@@ -26,8 +26,6 @@ errors = {
     "err2": "Location not found. Please enter correct city and state.",
     "err3": "Results not found. Please try again"
 }
-
-app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = (
     os.environ.get('DATABASE_URL', 'postgresql:///user_itinerary'))
@@ -320,6 +318,9 @@ def find_places():
         return jsonify(response)
     else:
         return jsonify({"result": errors["err3"]})
+
+
+#################Error page handlers################
 
 
 @app.errorhandler(404)

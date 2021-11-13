@@ -9,14 +9,15 @@ const endDate = document.getElementsByName("end_date")[0];
 const results = document.getElementById("results");
 const newHotelSelect = document.createElement("select");
 const newRestSelect = document.createElement("select");
-const hotelNames = [];
-const restNames = [];
+let hotelNames = [];
+let restNames = [];
 const city = document.getElementById("city");
 const placeType = document.getElementById("type");
 const state = document.getElementById("state");
 const searchForm = document.getElementById("search-form");
 const itiForm = document.getElementById("iti-form");
 const plantripDiv = document.getElementById("planTripImg");
+const loader = document.querySelector(".loader");
 const errors = {
   err1: "Name can't be blank",
   err2: "Please select start date",
@@ -33,11 +34,17 @@ function validateField(field, errId, fieldName, errMsg, event) {
   }
 }
 
-//validate itinerary form 
+//validate itinerary form
 itiForm.addEventListener("submit", function (e) {
   const itiname = document.getElementsByName("iti-name")[0].value;
   validateField(itiname, "name-error", "iti-name", errors["err1"], e);
-  validateField(startDate.value, "start-date-error", "start_date", errors["err2"], e);
+  validateField(
+    startDate.value,
+    "start-date-error",
+    "start_date",
+    errors["err2"],
+    e
+  );
   validateField(endDate.value, "end-date-error", "end_date", errors["err3"], e);
 });
 
@@ -170,20 +177,17 @@ function handleResults(data) {
     if (data[i]["result"]["rating"]) {
       const rating = document.createElement("span");
       for (let i = 0; i < 5; i++) {
-        console.log(data[i]["result"]["rating"])
-        console.log(data[i]["result"])
-        console.log(i)
+        console.log(data[i]["result"]["rating"]);
+        console.log(data[i]["result"]);
+        console.log(i);
         if (data[i]["result"]["rating"] < i + 0.5) {
-          console.log(i)
+          console.log(i);
           rating.innerHTML += "&#10025;";
         } else {
           rating.innerHTML += "&#10029;";
         }
         infoDiv.append(rating);
       }
-    }
-    else{
-      console.log("there is no data")
     }
     results.appendChild(tr);
   }
@@ -192,10 +196,11 @@ function handleResults(data) {
 //extract user input from search form and send to BE
 async function processForm(evt) {
   evt.preventDefault();
-  if(city.value === ""){
+  if (city.value === "") {
     Swal.fire("Please fill in the city name");
     return;
   }
+  loader.classList.remove("hide");
   const type_name = placeType.value;
   const city_name = city.value;
   const state_name = state.value;
@@ -203,15 +208,39 @@ async function processForm(evt) {
   let data = response.data;
   handleResults(data);
   plantripDiv.classList.add("hide");
+  setTimeout(function () {
+    loader.classList.add("hide");
+  }, 1000);
 }
 
 //clear results on the html page
 function clearResults() {
-  while (results.childNodes[0]) {
-    results.removeChild(results.childNodes[0]);
-  }
+  removeAllChildren(results);
   plantripDiv.classList.remove("hide");
+}
+
+function removeAllChildren(parent) {
+  while (parent.childNodes[0]) {
+    parent.removeChild(parent.childNodes[0]);
+  }
+}
+
+function removeChildrenNotFirstChildren(inputDiv) {
+  while (
+    inputDiv.firstElementChild &&
+    inputDiv.firstElementChild !== inputDiv.lastElementChild
+  ) {
+    inputDiv.removeChild(inputDiv.lastElementChild);
+  }
+}
+
+function clearOptions() {
+  hotelNames.splice(0, hotelNames.length);
+  restNames.splice(0, restNames);
+  removeChildrenNotFirstChildren(hotelInputDiv);
+  removeChildrenNotFirstChildren(restInputDiv);
 }
 
 searchForm.addEventListener("submit", processForm);
 searchForm.addEventListener("change", clearResults);
+city.addEventListener("change", clearOptions);
