@@ -27,14 +27,14 @@ const errors = {
 
 // get place names to make drop down options in itinerary form
 function getPlaceNames(placeName) {
+  let nameId = {};
   for (let i = 0; i < results.childNodes.length; i++) {
-    let nameId = {};
     let name = results.childNodes[i].firstChild.innerText;
     let id = results.childNodes[i].firstChild.id;
     nameId["name"] = name;
     nameId["id"] = id;
-    placeName.push(nameId);
   }
+  placeName.push(nameId);
 }
 
 //create drop down options from the results (names of places)
@@ -178,11 +178,11 @@ function handleResults(data) {
     if (data[i]["result"]["rating"]) {
       const rating = document.createElement("span");
       for (let i = 0; i < 5; i++) {
-        console.log(data[i]["result"]["rating"]);
-        console.log(data[i]["result"]);
-        console.log(i);
+        // console.log(data[i]["result"]["rating"]);
+        // console.log(data[i]["result"]);
+        // console.log(i);
         if (data[i]["result"]["rating"] < i + 0.5) {
-          console.log(i);
+          // console.log(i);
           rating.innerHTML += "&#10025;";
         } else {
           rating.innerHTML += "&#10029;";
@@ -226,7 +226,7 @@ function removeAllChildren(parent) {
   }
 }
 
-function removeChildrenNotFirstChildren(inputDiv) {
+function removeChildrenNotFirstChild(inputDiv) {
   while (
     inputDiv.firstElementChild &&
     inputDiv.firstElementChild !== inputDiv.lastElementChild
@@ -235,13 +235,15 @@ function removeChildrenNotFirstChildren(inputDiv) {
   }
 }
 
-function clearOptions() {
+function clearOptionsAndSelect() {
   hotelNames.splice(0, hotelNames.length);
   restNames.splice(0, restNames);
-  removeChildrenNotFirstChildren(hotelInputDiv);
-  removeChildrenNotFirstChildren(restInputDiv);
+  removeChildrenNotFirstChild(hotelInputDiv);
+  removeChildrenNotFirstChild(restInputDiv);
+  removeAllChildren(newHotelSelect)
+  removeAllChildren(newRestSelect)
 }
 
 searchForm.addEventListener("submit", processForm);
 searchForm.addEventListener("change", clearResults);
-city.addEventListener("change", clearOptions);
+city.addEventListener("change", clearOptionsAndSelect);
