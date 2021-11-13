@@ -24,7 +24,6 @@ const errors = {
   err3: "Please select end date",
 };
 
-
 // get place names to make drop down options in itinerary form
 function getPlaceNames(placeName) {
   let nameId = {};
@@ -158,6 +157,7 @@ function handleResults(data) {
     infoDiv.append(addressDetail);
     tr.appendChild(infoDiv);
     addressDetail.appendChild(placeAddress);
+
     if (data[i]["result"]["website"]) {
       const pWebsite = document.createElement("p");
       const website = document.createElement("a");
@@ -177,12 +177,8 @@ function handleResults(data) {
     }
     if (data[i]["result"]["rating"]) {
       const rating = document.createElement("span");
-      for (let i = 0; i < 5; i++) {
-        // console.log(data[i]["result"]["rating"]);
-        // console.log(data[i]["result"]);
-        // console.log(i);
-        if (data[i]["result"]["rating"] < i + 0.5) {
-          // console.log(i);
+      for (let j = 0; j < 5; j++) {
+        if (data[i]["result"]["rating"] < j + 0.5) {
           rating.innerHTML += "&#10025;";
         } else {
           rating.innerHTML += "&#10029;";
@@ -197,6 +193,7 @@ function handleResults(data) {
 //extract user input from search form and send to BE
 async function processForm(evt) {
   evt.preventDefault();
+  results.innerHTML = "";
   if (city.value === "") {
     Swal.fire("Please fill in the city name");
     return;
@@ -240,8 +237,8 @@ function clearOptionsAndSelect() {
   restNames.splice(0, restNames);
   removeChildrenNotFirstChild(hotelInputDiv);
   removeChildrenNotFirstChild(restInputDiv);
-  removeAllChildren(newHotelSelect)
-  removeAllChildren(newRestSelect)
+  removeAllChildren(newHotelSelect);
+  removeAllChildren(newRestSelect);
 }
 
 searchForm.addEventListener("submit", processForm);
