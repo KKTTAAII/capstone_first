@@ -27,9 +27,9 @@ errors = {
     "err3": "Results not found. Please try again"
 }
 
-connect_db(app)
 db.drop_all()
 db.create_all()
+connect_db(app)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL').replace("://", "ql://", 1)
 app.config['API_KEY'] = os.environ.get('API_KEY')
