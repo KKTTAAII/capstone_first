@@ -27,9 +27,9 @@ errors = {
     "err3": "Results not found. Please try again"
 }
 
+connect_db(app)
 db.drop_all()
 db.create_all()
-connect_db(app)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL').replace("://", "ql://", 1)
 app.config['API_KEY'] = os.environ.get('API_KEY')
@@ -38,7 +38,6 @@ app.config['SQLALCHEMY_ECHO'] = False
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = True
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', "my_key")
 toolbar = DebugToolbarExtension(app)
-
 
 
 def save_to_database(details, type, iti_type, iti_id):
