@@ -28,6 +28,7 @@ errors = {
 }
 
 connect_db(app)
+db.drop_all()
 db.create_all()
 
 app.config['SQLALCHEMY_DATABASE_URI'] = (
