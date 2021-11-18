@@ -17,16 +17,16 @@ class UserModelTestCase(TestCase):
         db.drop_all()
         db.create_all()
 
-        u1 = User(
+        mock_user = User(
             email="test@test.com",
             username="testuser",
             password="PASSWORD"
         )
         
-        db.session.add(u1)
+        db.session.add(mock_user)
         db.session.commit()
 
-        self.u1 = u1
+        self.mock_user = mock_user
     
         self.client = app.test_client()
 
@@ -40,10 +40,10 @@ class UserModelTestCase(TestCase):
 
     def test_create_user(self):
         """Test that user data is in database"""
-        self.assertEqual(self.u1.username, "testuser")
-        self.assertEqual(self.u1.email, "test@test.com")
-        self.assertEqual(self.u1.password, "PASSWORD")
-        self.assertNotEqual(self.u1.password, "HASHED_PASSWORD")
+        self.assertEqual(self.mock_user.username, "testuser")
+        self.assertEqual(self.mock_user.email, "test@test.com")
+        self.assertEqual(self.mock_user.password, "PASSWORD")
+        self.assertNotEqual(self.mock_user.password, "HASHED_PASSWORD")
 
     def test_create_user_fail(self):
         with self.assertRaises(TypeError) as context:
@@ -69,8 +69,3 @@ class UserModelTestCase(TestCase):
         db.session.commit()
         test_auth = User.authenticate("testuser3", "sjgfohnofdhn")
         self.assertFalse(test_auth)
-
-   
-        
-    
-    

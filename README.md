@@ -74,16 +74,8 @@ The user can create an itinerary by naming the trip, select start date and end d
 
 8. Enjoy the code!
 
-### Possible features
-  - users can favorite and unfavorite the places and can view all their favorites
-  - users can email their itinerary to their friends
-  - the places can show range of prices 
-  
-### Limit API Use Note
 
-I decided to store place details with actual name, address, phone number, and website instead of an API call for that place because of a financial limitation on API usage
-
-### Future features
+## Future features
   - favorite and unfavorite the places and view all favorites
 
       - adding a star/favorite button in the place box at the corner. The user can click to favorite and click again to unfavorite.

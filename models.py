@@ -117,4 +117,3 @@ class Restaurant(db.Model):
 
     def __repr__(self):
         return f"<Restaurant api {self.name}>"
-

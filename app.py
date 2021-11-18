@@ -22,9 +22,9 @@ my_fields = [
     'rating']
 
 errors = {
-    "err1": "Oops, something's wrong. Please try again.",
-    "err2": "Location not found. Please enter correct city and state.",
-    "err3": "Results not found. Please try again"
+    "server_err": "Oops, something's wrong. Please try again.",
+    "location_not_found": "Location not found. Please enter correct city and state.",
+    "results_not_found": "Results not found. Please try again"
 }
 
 
@@ -291,20 +291,18 @@ def find_places():
             check_state_list.append(name)
     else:
         return jsonify(
-            {"result": errors["err1"]})
+            {"result": errors["server_err"]})
 
     # check that there is a city in that state
     if city_name.capitalize() == city.capitalize() and state in check_state_list:
         result = gmaps.places_nearby(
-            location=(
-                lat,
-                lng),
+            location=(lat,lng),
             type=type,
             rank_by="distance")
         places_results = result
     else:
         return jsonify(
-            {"result": errors["err2"]})
+            {"result": errors["location_not_found"]})
 
     # get place details
     if(places_results["status"] == "OK"):
@@ -316,7 +314,7 @@ def find_places():
             response.append(place_details)
         return jsonify(response)
     else:
-        return jsonify({"result": errors["err3"]})
+        return jsonify({"result": errors["results_not_found"]})
 
 
 #################Error page handlers################

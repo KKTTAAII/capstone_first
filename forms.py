@@ -10,5 +10,3 @@ class SignupForm(FlaskForm):
 class LoginForm(FlaskForm):
     username = StringField("Username", validators=[InputRequired(message="Username can't be blank")])
     password = PasswordField("Password", validators=[Length(min=6)])
-
-

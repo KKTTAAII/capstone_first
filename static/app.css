@@ -15,7 +15,7 @@
     height: 100%;
 }
 
-.addHotelBtn, .addRestBtn, .hotel_div, .rest_div {
+.no-display {
     display: none;
 }
 

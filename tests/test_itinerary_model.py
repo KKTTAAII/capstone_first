@@ -19,72 +19,72 @@ class ItineraryModelTestCase(TestCase):
         db.drop_all()
         db.create_all()
 
-        u1 = User(
+        mock_user = User(
             email="test@test.com",
             username="testuser",
             password="PASSWORD"
         )
         
-        db.session.add(u1)
+        db.session.add(mock_user)
         db.session.commit()
 
-        self.u1 = u1
+        self.mock_user = mock_user
 
-        iti1 = Itinerary(
-            user_id = u1.id,
+        mock_iti = Itinerary(
+            user_id = mock_user.id,
             iti_name = "Breck2021",
             start_date = "2021-11-18",
             end_date = "2021-11-21"
         )
 
-        db.session.add(iti1)
+        db.session.add(mock_iti)
         db.session.commit()
 
-        self.iti1 = iti1
+        self.mock_iti = mock_iti
 
-        hotel1 = Hotel(
+        mock_hotel = Hotel(
             name = "Gravity Haus",
             address = "202 st",
             website = "gh@gmail",
             number = "970-256-8794"
         )
         
-        db.session.add(hotel1)
+        db.session.add(mock_hotel)
         db.session.commit()
 
-        self.hotel1 = hotel1
+        self.mock_hotel = mock_hotel
 
-        rest1 = Restaurant(
+        mock_rest = Restaurant(
             name = "Cabin Juice",
             address = "200 st",
             website = "cj@gmail",
             number = "970-256-1587"
         )
 
-        db.session.add(rest1)
+        db.session.add(mock_rest)
         db.session.commit()
 
-        self.rest1 = rest1
+        self.mock_rest = mock_rest
 
-        iti_hotel1 = Itinerary_hotel(
-            itinerary_id = iti1.id,
-            hotel_id = hotel1.id
+        mock_iti_hotel = Itinerary_hotel(
+            itinerary_id = mock_iti.id,
+            hotel_id = mock_hotel.id
         )
 
-        db.session.add(iti_hotel1)
+        db.session.add(mock_iti_hotel)
         db.session.commit()
 
-        self.iti_hotel1 = iti_hotel1
+        self.mock_iti_hotel1 = mock_iti_hotel
 
-        iti_rest1 = Itinerary_restaurant(
-            itinerary_id = iti1.id,
-            rest_id = rest1.id
+        mock_iti_rest = Itinerary_restaurant(
+            itinerary_id = mock_iti.id,
+            rest_id = mock_rest.id
         )
 
-        db.session.add(iti_rest1)
+        db.session.add(mock_iti_rest)
         db.session.commit()
 
-        self.iti_rest1 = rest1
+        self.mock_iti_rest = mock_iti_rest
 
         self.client = app.test_client()
 
@@ -96,17 +96,14 @@ class ItineraryModelTestCase(TestCase):
 
     def test_create_itinerary(self):
         """Test that itinerary data is in database"""
-        self.assertEqual(self.iti1.iti_name, "Breck2021")
-        self.assertEqual(self.iti1.start_date, datetime.date(2021,11,18))
-        self.assertEqual(self.iti1.end_date, datetime.date(2021,11,21))
-        self.assertEqual(self.iti1.iti_hotels[0].hotels.name, "Gravity Haus")
-        self.assertEqual(self.iti1.iti_hotels[0].hotels.address, "202 st")
-        self.assertEqual(self.iti1.iti_hotels[0].hotels.website, "gh@gmail")
-        self.assertEqual(self.iti1.iti_hotels[0].hotels.number, "970-256-8794")
-        self.assertEqual(self.iti1.iti_rests[0].rests.name, "Cabin Juice")
-        self.assertEqual(self.iti1.iti_rests[0].rests.address, "200 st")
-        self.assertEqual(self.iti1.iti_rests[0].rests.website, "cj@gmail")
-        self.assertEqual(self.iti1.iti_rests[0].rests.number, "970-256-1587")
-
-    
-        
+        self.assertEqual(self.mock_iti.iti_name, "Breck2021")
+        self.assertEqual(self.mock_iti.start_date, datetime.date(2021,11,18))
+        self.assertEqual(self.mock_iti.end_date, datetime.date(2021,11,21))
+        self.assertEqual(self.mock_iti.iti_hotels[0].hotels.name, "Gravity Haus")
+        self.assertEqual(self.mock_iti.iti_hotels[0].hotels.address, "202 st")
+        self.assertEqual(self.mock_iti.iti_hotels[0].hotels.website, "gh@gmail")
+        self.assertEqual(self.mock_iti.iti_hotels[0].hotels.number, "970-256-8794")
+        self.assertEqual(self.mock_iti.iti_rests[0].rests.name, "Cabin Juice")
+        self.assertEqual(self.mock_iti.iti_rests[0].rests.address, "200 st")
+        self.assertEqual(self.mock_iti.iti_rests[0].rests.website, "cj@gmail")
+        self.assertEqual(self.mock_iti.iti_rests[0].rests.number, "970-256-1587")
