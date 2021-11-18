@@ -1,9 +1,16 @@
-## The Concierge
+## [The Concierge](https://the-concierge1.herokuapp.com/)
 
+Link: https://the-concierge1.herokuapp.com/
 
 The Concierge is the app that a user can sign up to create an itinerary for their trip. The user can search hotels or restaurants by putting in the names of the city and the state. Once the user submits the city and the state, a list of hotels/restaurants will show up with names, addresses, websites, phone numbers, and ratings (however, some places may not have all of the information).
 
 The user can create an itinerary by naming the trip, select start date and end date, select the hotels/restaurants they are going to stay/visit. Their created itinerary will also have information about the places they select. The user can also delete the itinerary. On their itinerary page, all the created itineraries are shown with the names of the trips.
+
+## User Flow
+
+![user flow](static/assets/The%20Concierge%20User%20Flow.png)
+
+
 
 ## Main Features
 - A user can sign up/ log in / log out
@@ -67,5 +74,30 @@ The user can create an itinerary by naming the trip, select start date and end d
 
 8. Enjoy the code!
 
+### Possible features
+  - users can favorite and unfavorite the places and can view all their favorites
+  - users can email their itinerary to their friends
+  - the places can show range of prices 
+  
+### Limit API Use Note
+
+I decided to store place details with actual name, address, phone number, and website instead of an API call for that place because of a financial limitation on API usage
+
+### Future features
+  - favorite and unfavorite the places and view all favorites
+
+      - adding a star/favorite button in the place box at the corner. The user can click to favorite and click again to unfavorite.
+  
+  - can email their itinerary to their friends
+
+      - in the trip detail page, add a "share" button and input where the user can type the email of the recipient and click share to send the itinerary. 
+
+  - the places can show range of prices 
+
+    - in the place box where it shows the place details, add another p tag where we can show 1-5 dollar signs to indicate the range of price of this place. The range price can be obtained from google places API
+  
+  - minimize the space in the database and get the updated place detail by storing the api of the place detail itself instead of storing name, address, phone number, website. However, with financial limiation from using API, the data will be stored as they are for now
+  
+  
 
 Author: [Boonyawee P.](https://www.linkedin.com/in/boonyawee-prasertsiripond/)
