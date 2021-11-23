@@ -106,3 +106,23 @@ div#listing {
     margin-right: 15px;
 }
 
+@media screen and (max-width: 620px) {
+
+    .responsive-h1, .responsive-h4 {
+        font-size: 6vw;
+    }
+
+    .text-div{
+        margin-top: -300px;
+    }
+
+    .holiday {
+        width: 90vw;
+        height: 50vh;
+    }
+
+    #responsive-div {
+        display: flex;
+        flex-direction: column;
+    }
+}
