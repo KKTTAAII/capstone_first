@@ -11,7 +11,6 @@ The user can create an itinerary by naming the trip, select start date and end d
 ![user flow](static/assets/The%20Concierge%20User%20Flow.png)
 
 
-
 ## Main Features
 - A user can sign up/ log in / log out
 
@@ -28,6 +27,10 @@ The user can create an itinerary by naming the trip, select start date and end d
 - Create itinerary
  
   Once the user selects where they want to stay and eat, they can create an itinerary and print it out or come back to look at their trip plan later on their account.
+
+## Schema
+
+![Schema](schema/Capstone%20Schema.png).
   
 
 ## API used 
@@ -42,6 +45,7 @@ The user can create an itinerary by naming the trip, select start date and end d
 - SQLAlchemy
 - Postgres
 - Flask
+- Google maps Python library
 
 ## Try the code on your local machine
 1. clone the repo
@@ -74,6 +78,30 @@ The user can create an itinerary by naming the trip, select start date and end d
 
 8. Enjoy the code!
 
+
+## Run tests
+
+1. Create test database
+
+        $ createdb itinerary_test
+
+2. Run the command with the test file name you would like to test
+
+    2.1 To run user routes test
+
+        $ python -m unittest tests/test_user_route_app.py
+
+    2.2 To run itinerary routes test
+
+        $ python -m unittest tests/test_itinerary_route_app.py
+
+    2.3 To run user model test
+
+        $ python -m unittest tests/test_user_model.py
+
+    2.4 To run itinerary model test
+
+        $ python -m unittest tests/test_itinerary_model.py
 
 ## Future features
   - favorite and unfavorite the places and view all favorites
