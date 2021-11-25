@@ -30,7 +30,7 @@ The user can create an itinerary by naming the trip, select start date and end d
 
 ## Schema
 
-![Schema](schema/Capstone%20Schema.png).
+![Schema](/schema/Capstone%20Schema.png).
   
 
 ## API used 
