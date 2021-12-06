@@ -45,7 +45,7 @@ The user can create an itinerary by naming the trip, select start date and end d
 - SQLAlchemy
 - Postgres
 - Flask
-- Google maps Python library
+- [Google maps Python library](https://github.com/googlemaps/google-maps-services-python)
 
 ## Try the code on your local machine
 1. clone the repo
