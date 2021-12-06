@@ -59,24 +59,28 @@ The user can create an itinerary by naming the trip, select start date and end d
 
         $ pip3 install -r requirements.txt
 
-4. activate the environment
+4. install google maps Python Library
+   
+        $ pip install -U googlemaps
+
+5. activate the environment
 
         $ source venv/bin/activate
 
-5. you can create your own API Key here
+6. you can create your own API Key here
 
     [Google Places API KEY](https://mapsplatform.google.com/)
 
-6. create database
+7. create database
 
           $ createdb user_itinerary
 
-7. create tables
+8. create tables
 
           $ ipython
           In [1]: %run app.py
 
-8. Enjoy the code!
+9.  Enjoy the code!
 
 
 ## Run tests
