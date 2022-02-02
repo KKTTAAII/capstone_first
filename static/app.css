@@ -106,6 +106,20 @@ div#listing {
     margin-right: 15px;
 }
 
+.already-signed-up {
+    margin-top: -100px;
+}
+
+.type-div{
+    display: flex;
+    margin-left: 200px;
+    margin-top: 8.5px;
+}
+
+.find-span {
+    margin-left: 150px;
+}
+
 @media screen and (max-width: 620px) {
 
     .responsive-h1, .responsive-h4 {

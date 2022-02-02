@@ -3,20 +3,17 @@
 <div>
   <div class="search mt-3">
     <form id="search-form">
-      <div class="form-row" id="responsive-div">
-        <div id="place-type" class="form-group col my-1">
-          <label for="type">Find</label>
-          <select
-            name="type"
-            id="type"
-            id="type"
-            class="form-control form-select"
-          >
-            <option value="lodging">hotels</option>
-            <option value="restaurant">restaurants</option>
-          </select>
-        </div>
-        <div id="city-name" class="form-group col-5 my-1">
+      <div class="form-row d-flex justify-content-center" id="responsive-div">
+        <div id="place-type" class="form-group col-3 my-1">
+          <span class="find-span">Find: </span>
+          <div class="type-div">
+            <input type="radio" class="btn-check " name="type" id="lodging" value="lodging" autocomplete="off" checked>
+            <label class="btn btn-secondary type" for="lodging">Hotels</label>
+            <input type="radio" class="btn-check " name="type" id="restaurant" value="restaurant" autocomplete="off">
+            <label class="btn btn-secondary type" for="restaurant">Restaurant</label>
+          </div>
+          </div>
+        <div id="city-name" class="form-group col-3 my-1">
           <label for="city">City</label>
           <input
             id="city"
@@ -26,7 +23,7 @@
             class="form-control"
           />
         </div>
-        <div id="state-name" class="form-group col my-1">
+        <div id="state-name" class="form-group col-3 my-1">
           <label for="state">State</label>
           <select name="state" id="state" class="form-control form-select">
           </select>

@@ -74,9 +74,12 @@ let today = new Date().toISOString().split("T")[0];
 startDate.setAttribute("min", today);
 
 // Ensure that the end date is not before the start date
-startDate.addEventListener("change", function () {
+startDate.addEventListener(
+  "change",
+  function () {
     if (startDate.value) endDate.min = startDate.value;
-  }, false
+  },
+  false
 );
 
 // show options to add hotels and restaurants to the itinerary form when there are results only
@@ -88,8 +91,15 @@ const newHotelSelect = document.createElement("select");
 const newRestSelect = document.createElement("select");
 
 results.addEventListener(
-  "DOMNodeInserted", function () {
-    const type = document.getElementById("type").value;
+  "DOMNodeInserted",
+  function () {
+    const placeType = document.getElementsByName("type");
+    let type;
+    for (let i = 0; i < placeType.length; i++) {
+      if (placeType[i].checked) {
+        type = placeType[i].value;
+      }
+    }
     if (type === "lodging") {
       addHotelBtn.classList.add("show");
       hotelInputDiv.classList.add("show");
@@ -181,14 +191,14 @@ let usStates = [
   { name: "WYOMING", abbreviation: "WY" },
 ];
 
-function createStateOptions(){
+function createStateOptions() {
   const state = document.getElementById("state");
-  for(var i = 0; i < usStates.length; i++) {
-  var option = document.createElement("option");
-  option.text = usStates[i].name;
-  option.value = usStates[i].abbreviation;
-  state.add(option);
-  };
+  for (var i = 0; i < usStates.length; i++) {
+    var option = document.createElement("option");
+    option.text = usStates[i].name;
+    option.value = usStates[i].abbreviation;
+    state.add(option);
+  }
 }
 
 createStateOptions();
@@ -265,8 +275,15 @@ async function processForm(evt) {
   evt.preventDefault();
   const loader = document.querySelector(".loader");
   const city = document.getElementById("city");
-  const placeType = document.getElementById("type");
+  const placeType = document.getElementsByName("type");
   const state = document.getElementById("state");
+  let type;
+
+  for (let i = 0; i < placeType.length; i++) {
+    if (placeType[i].checked) {
+      type = placeType[i].value;
+    }
+  }
 
   results.innerHTML = "";
   if (city.value === "") {
@@ -274,7 +291,7 @@ async function processForm(evt) {
     return;
   }
   loader.classList.remove("hide");
-  const typeName = placeType.value;
+  const typeName = type;
   const cityName = city.value;
   const stateName = state.value;
   let response = await getResultsByLocation(cityName, stateName, typeName);

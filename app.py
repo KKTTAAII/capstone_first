@@ -37,6 +37,7 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', "my_key")
 toolbar = DebugToolbarExtension(app)
 
 connect_db(app)
+db.create_all()
 
 def save_to_database(details, type, iti_type, iti_id):
     if details:
