@@ -112,12 +112,20 @@ div#listing {
 
 .type-div{
     display: flex;
-    margin-left: 200px;
+    margin-left: 50px;
     margin-top: 8.5px;
 }
 
+.type{
+    width: 200px;
+}
+
 .find-span {
-    margin-left: 150px;
+    margin-left: 50px;
+}
+
+.or-span {
+    margin: 5px 10px;
 }
 
 @media screen and (max-width: 620px) {

@@ -277,7 +277,9 @@ async function processForm(evt) {
   const city = document.getElementById("city");
   const placeType = document.getElementsByName("type");
   const state = document.getElementById("state");
+  const planMyTripBtn = document.getElementById("submitItiBtn");
   let type;
+  planMyTripBtn.classList.remove("hide");
 
   for (let i = 0; i < placeType.length; i++) {
     if (placeType[i].checked) {
