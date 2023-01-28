@@ -1,4 +1,6 @@
 import os
+import json
+import time
 from flask import Flask, redirect, render_template, flash, session, g, request, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 from models import db, connect_db, User, Itinerary, Itinerary_hotel, Itinerary_restaurant, Hotel, Restaurant
@@ -28,7 +30,7 @@ errors = {
 }
 
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL').replace("://", "ql://", 1) or "postgresql:///user_itinerary"
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', "postgresql:///user_itinerary")
 app.config['API_KEY'] = os.environ.get('API_KEY')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
@@ -276,8 +278,9 @@ def find_places():
     city_name = ""
     lat = ""
     lng = ""
-    places_results = ""
+    places_results = {}
     response = []
+    
     # get lat and lng for city and state name
     location = gmaps.geocode(address=f"{city}{state}")
     if location:
@@ -296,22 +299,36 @@ def find_places():
 
     # check that there is a city in that state
     if city_name.capitalize() == city.capitalize() and state in check_state_list:
-        result = gmaps.places_nearby(
-            location=(lat,lng),
-            type=type,
-            rank_by="distance")
-        places_results = result
+        params = {
+        'location': (lat,lng),
+        'type':type,
+        'rank_by':"distance",
+    }
+        result = gmaps.places_nearby(**params)
+
+        for key in result:
+            places_results[key] = result[key]
+        # get all results up to 60 max per googlemaps
+        while result.get('next_page_token'):
+            next_page = result['next_page_token']
+            time.sleep(2)
+            more_results = gmaps.places_nearby(page_token=next_page, **params)
+            result = more_results
+            places_results["results"].extend(result["results"])
+                
     else:
         return jsonify(
             {"result": errors["location_not_found"]})
 
     # get place details
     if(places_results["status"] == "OK"):
+        print(json.dumps(places_results,  indent=2))
         for place in places_results['results']:
             my_place_id = place["place_id"]
             place_details = gmaps.place(
                 place_id=my_place_id, fields=my_fields)
             place_details["place_id"] = my_place_id
+            place_details["location"] = place["geometry"]["location"]
             response.append(place_details)
         return jsonify(response)
     else:

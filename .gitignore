@@ -1,4 +1,9 @@
 venv/
 __pycache__/
+__pycache__/models.cpython-38.pyc
+__pycache__/forms.cpython-38.pyc
+__pycache__/models.cpython-38.pyc
 .env
 try.py
+node_modules/
+
