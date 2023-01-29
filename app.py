@@ -30,7 +30,7 @@ errors = {
 }
 
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', "postgresql:///user_itinerary")
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL').replace("://", "ql://", 1) or "postgresql:///user_itinerary"
 app.config['API_KEY'] = os.environ.get('API_KEY')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
@@ -322,7 +322,6 @@ def find_places():
 
     # get place details
     if(places_results["status"] == "OK"):
-        print(json.dumps(places_results,  indent=2))
         for place in places_results['results']:
             my_place_id = place["place_id"]
             place_details = gmaps.place(
