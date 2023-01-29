@@ -1,4 +1,4 @@
-/////////////// handle itinerary creation form //////////////
+///////////////////////////////////////////////////// handle itinerary creation form //////////////////////////////////////
 const results = document.getElementById("results");
 const ERRORS = {
   blankName: "Name can't be blank",
@@ -127,69 +127,7 @@ addRestBtn.addEventListener("click", function () {
   restInputDiv.appendChild(clone);
 });
 
-////////////// handle Search box and display results in a table///////////////
-
-let usStates = [
-  { name: "ALABAMA", abbreviation: "AL" },
-  { name: "ALASKA", abbreviation: "AK" },
-  { name: "AMERICAN SAMOA", abbreviation: "AS" },
-  { name: "ARIZONA", abbreviation: "AZ" },
-  { name: "ARKANSAS", abbreviation: "AR" },
-  { name: "CALIFORNIA", abbreviation: "CA" },
-  { name: "COLORADO", abbreviation: "CO" },
-  { name: "CONNECTICUT", abbreviation: "CT" },
-  { name: "DELAWARE", abbreviation: "DE" },
-  { name: "DISTRICT OF COLUMBIA", abbreviation: "DC" },
-  { name: "FEDERATED STATES OF MICRONESIA", abbreviation: "FM" },
-  { name: "FLORIDA", abbreviation: "FL" },
-  { name: "GEORGIA", abbreviation: "GA" },
-  { name: "GUAM", abbreviation: "GU" },
-  { name: "HAWAII", abbreviation: "HI" },
-  { name: "IDAHO", abbreviation: "ID" },
-  { name: "ILLINOIS", abbreviation: "IL" },
-  { name: "INDIANA", abbreviation: "IN" },
-  { name: "IOWA", abbreviation: "IA" },
-  { name: "KANSAS", abbreviation: "KS" },
-  { name: "KENTUCKY", abbreviation: "KY" },
-  { name: "LOUISIANA", abbreviation: "LA" },
-  { name: "MAINE", abbreviation: "ME" },
-  { name: "MARSHALL ISLANDS", abbreviation: "MH" },
-  { name: "MARYLAND", abbreviation: "MD" },
-  { name: "MASSACHUSETTS", abbreviation: "MA" },
-  { name: "MICHIGAN", abbreviation: "MI" },
-  { name: "MINNESOTA", abbreviation: "MN" },
-  { name: "MISSISSIPPI", abbreviation: "MS" },
-  { name: "MISSOURI", abbreviation: "MO" },
-  { name: "MONTANA", abbreviation: "MT" },
-  { name: "NEBRASKA", abbreviation: "NE" },
-  { name: "NEVADA", abbreviation: "NV" },
-  { name: "NEW HAMPSHIRE", abbreviation: "NH" },
-  { name: "NEW JERSEY", abbreviation: "NJ" },
-  { name: "NEW MEXICO", abbreviation: "NM" },
-  { name: "NEW YORK", abbreviation: "NY" },
-  { name: "NORTH CAROLINA", abbreviation: "NC" },
-  { name: "NORTH DAKOTA", abbreviation: "ND" },
-  { name: "NORTHERN MARIANA ISLANDS", abbreviation: "MP" },
-  { name: "OHIO", abbreviation: "OH" },
-  { name: "OKLAHOMA", abbreviation: "OK" },
-  { name: "OREGON", abbreviation: "OR" },
-  { name: "PALAU", abbreviation: "PW" },
-  { name: "PENNSYLVANIA", abbreviation: "PA" },
-  { name: "PUERTO RICO", abbreviation: "PR" },
-  { name: "RHODE ISLAND", abbreviation: "RI" },
-  { name: "SOUTH CAROLINA", abbreviation: "SC" },
-  { name: "SOUTH DAKOTA", abbreviation: "SD" },
-  { name: "TENNESSEE", abbreviation: "TN" },
-  { name: "TEXAS", abbreviation: "TX" },
-  { name: "UTAH", abbreviation: "UT" },
-  { name: "VERMONT", abbreviation: "VT" },
-  { name: "VIRGIN ISLANDS", abbreviation: "VI" },
-  { name: "VIRGINIA", abbreviation: "VA" },
-  { name: "WASHINGTON", abbreviation: "WA" },
-  { name: "WEST VIRGINIA", abbreviation: "WV" },
-  { name: "WISCONSIN", abbreviation: "WI" },
-  { name: "WYOMING", abbreviation: "WY" },
-];
+////////////////////////////////////////////// handle Search box and display results in a table/////////////////////////////////
 
 function createStateOptions() {
   const state = document.getElementById("state");
@@ -211,17 +149,95 @@ async function getResultsByLocation(city, state, type) {
   return resp;
 }
 
-// add results to the html page
+///////////////////////////////////////////////////////////handle pagination////////////////////////////////////
+//creating page list
+const paginationNumbersContainer =
+  document.getElementById("pagination-numbers");
+const paginatedList = document.getElementById("results");
+const listItems = paginatedList.querySelectorAll("tr");
+const nextButton = document.getElementById("next-button");
+const prevButton = document.getElementById("prev-button");
+
+let pageCount;
+let paginationLimit = 10;
+let currentPage;
+
+function appendPageNumber(index) {
+  const pageNumber = document.createElement("button");
+  pageNumber.className = "pagination-number";
+  pageNumber.id = index;
+  pageNumber.innerHTML = index;
+  pageNumber.setAttribute("page-index", index);
+  pageNumber.setAttribute("aria-label", "Page " + index);
+  paginationNumbersContainer.appendChild(pageNumber);
+}
+
+function getPaginationNumbers() {
+  for (let i = 1; i <= pageCount; i++) {
+    appendPageNumber(i);
+  }
+}
+
+function handleActivePageNumber() {
+  document.querySelectorAll(".pagination-number").forEach(button => {
+    button.classList.remove("active");
+
+    const pageIndex = Number(button.getAttribute("page-index"));
+    if (pageIndex == currentPage) {
+      button.classList.add("active");
+      button.classList.add("btn-primary");
+    }
+  });
+}
+
+function setCurrentPage(pageNum, listItems) {
+  currentPage = pageNum;
+
+  handleActivePageNumber();
+
+  const prevRange = (pageNum - 1) * paginationLimit;
+  const currRange = pageNum * paginationLimit;
+  //ensure that only the items on the current page show, the other will display none
+  listItems.forEach((item, index) => {
+    item.classList.add("hidden");
+    if (index >= prevRange && index < currRange) {
+      item.classList.remove("hidden");
+    }
+  });
+}
+
+function createPageNumbers(data, HTMLArray) {
+  pageCount = Math.ceil(data.length / paginationLimit);
+  getPaginationNumbers();
+  setCurrentPage(1, HTMLArray);
+
+  //the pagination buttons
+  document.querySelectorAll(".pagination-number").forEach(button => {
+    const pageIndex = Number(button.getAttribute("page-index"));
+    if (pageIndex) {
+      button.addEventListener("click", () => {
+        setCurrentPage(pageIndex, HTMLArray);
+      });
+    }
+  });
+}
+
+///////////////////////////////////////////////// add results to the html page//////////////////////////////////
 function handleResults(data) {
   if (!Array.isArray(data)) {
     errorMsg = data["result"];
     Swal.fire(errorMsg);
   }
+
+  //used for createPageNumbers function
+  const HTMLelementArray = [];
+
   for (i = 0; i < data.length; i++) {
     let name = data[i]["result"]["name"];
     let address = data[i]["result"]["formatted_address"];
     let placeId = data[i]["place_id"];
     const tr = document.createElement("tr");
+    tr.className = "result";
     const nameTd = document.createElement("td");
     nameTd.id = placeId;
     const placeName = document.createTextNode(name);
@@ -264,11 +280,25 @@ function handleResults(data) {
         infoDiv.append(rating);
       }
     }
+    HTMLelementArray.push(tr);
     results.appendChild(tr);
   }
+
+  //used this for pageination
+  return HTMLelementArray;
 }
 
+//////////////////////////////////////////get lat and lng for GG map markers///////////////////////////////////
+function getLocations(data) {
+  return data.map(place => {
+    return { name: place.result.name, location: place.location };
+  });
+}
+
+
+/////////////////////////////////////////////////////////////////////process form/////////////////////////////////
 const plantripDiv = document.getElementById("planTripImg");
+let data, locations;
 
 //extract user input from search form and send to BE
 async function processForm(evt) {
@@ -296,18 +326,22 @@ async function processForm(evt) {
   const typeName = type;
   const cityName = city.value;
   const stateName = state.value;
-  let response = await getResultsByLocation(cityName, stateName, typeName);
-  let data = response.data;
-  handleResults(data);
+  const response = await getResultsByLocation(cityName, stateName, typeName);
+  data = response.data;
+  locations = getLocations(data);
+  initMap();
+  const HTMLArray = handleResults(data);
+  createPageNumbers(data, HTMLArray);
   plantripDiv.classList.add("hide");
   setTimeout(function () {
     loader.classList.add("hide");
   }, 1000);
 }
 
-//clear results on the html page
+/////////////////////////////////////////clear results on the html page///////////////////////////////////////
 function clearResults() {
   removeAllChildren(results);
+  removeAllChildren(paginationNumbersContainer);
   plantripDiv.classList.remove("hide");
 }
 
@@ -334,6 +368,54 @@ function clearOptionsAndSelect() {
   removeAllChildren(newHotelSelect);
   removeAllChildren(newRestSelect);
 }
+
+//////////////////////////////////////////////////////////google map/////////////////////////////////////
+let map;
+//generate a map
+function initMap() {
+  const USA = { lat: 39.80976, lng: -98.74831 };
+  if (locations && locations.length > 0) {
+    map = new google.maps.Map(document.getElementById("map"), {
+      center: locations[0].location,
+      zoom: 15,
+    });
+    createMarkers(locations);
+  } else {
+    map = new google.maps.Map(document.getElementById("map"), {
+      center: USA,
+      zoom: 5,
+    });
+  }
+}
+
+//generate map markers
+function createMarkers(locations) {
+  let infowindow = new google.maps.InfoWindow();
+  let marker, count;
+  for (count = 0; count < locations.length; count++) {
+    marker = new google.maps.Marker({
+      position: locations[count].location,
+      map: map,
+      title: locations[count].name,
+    });
+
+    google.maps.event.addListener(
+      marker,
+      "click",
+      (function (marker) {
+        return function () {
+          let content = marker.getTitle();
+          infowindow.setContent(
+            '<div class="infowindow">' + content + "</div>"
+          );
+          infowindow.open(map, marker);
+        };
+      })(marker)
+    );
+  }
+}
+
+//////////////////////////////////////////////////search form eventListeners//////////////////////////////////////////
 
 const searchForm = document.getElementById("search-form");
 

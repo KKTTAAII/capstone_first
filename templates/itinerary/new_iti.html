@@ -13,16 +13,10 @@
             <input type="radio" class="btn-check " name="type" id="restaurant" value="restaurant" autocomplete="off">
             <label class="btn btn-secondary type" for="restaurant">Restaurant</label>
           </div>
-          </div>
+        </div>
         <div id="city-name" class="form-group col-3 my-1">
           <label for="city">City</label>
-          <input
-            id="city"
-            placeholder="Enter a city"
-            type="text"
-            name="city"
-            class="form-control"
-          />
+          <input id="city" placeholder="Enter a city" type="text" name="city" class="form-control" />
         </div>
         <div id="state-name" class="form-group col-3 my-1">
           <label for="state">State</label>
@@ -38,22 +32,49 @@
     </form>
   </div>
 
+  <!-- Map here -->
+  <div id="map"></div>
+  <!-- Map here -->
+
   <div class="row mt-5">
     <div class="col-sm">
       <div id="listing">
         <table id="resultsTable" class="table table-bordered">
-          <tbody id="results"></tbody>
+          <!-- table of results. <tr> will be attached to <tbody> -->
+          <tbody id="results" aria-live="polite"></tbody>
         </table>
+
+        <!-- waiting picture -->
         <div id="planTripImg" class="text-center">
           <div class="planTrip">Plan your trip</div>
-          <img
-            src="/static/assets/—Pngtree—beach travel 3d elements_5356937.png"
-            alt="holiday"
-            class="holiday"
-          />
+          <img src="/static/assets/—Pngtree—beach travel 3d elements_5356937.png" alt="holiday" class="holiday" />
         </div>
         <div class="loader hide text-center">Please wait...</div>
+
+        <!-- need styling -->
+        <!-- pagination section -->
+
+        <div id="pagination-container" class="center">
+          <nav aria-label="Page navigation">
+            <div class="pagination">
+              <button class="pagination-button page-item" id="prev-button" title="Previous page"
+                aria-label="Previous page">
+                &lt;
+              </button>
+
+
+              <div id="pagination-numbers" class="page-item">
+              </div>
+
+              <button class="pagination-button page-item" id="next-button" title="Next page" aria-label="Next page">
+                &gt;
+              </button>
+            </div>
+          </nav>
+        </div>
+        <!-- pagination section -->
       </div>
+
     </div>
 
     <div class="col-sm">
@@ -84,10 +105,7 @@
               <label for="hotel" class="form-label">Hotel</label>
             </div>
 
-            <button
-              type="button"
-              class="addHotelBtn btn btn-primary btn-sm btn-block no-display"
-            >
+            <button type="button" class="addHotelBtn btn btn-primary btn-sm btn-block no-display">
               +
             </button>
 
@@ -97,20 +115,13 @@
 
             <br />
 
-            <button
-              type="button"
-              class="addRestBtn btn btn-primary btn-sm btn-block no-display"
-            >
+            <button type="button" class="addRestBtn btn btn-primary btn-sm btn-block no-display">
               +
             </button>
 
             <br />
             <br />
-            <button
-              type="submit"
-              class="btn btn-primary btn-lg btn-block hide"
-              id="submitItiBtn"
-            >
+            <button type="submit" class="btn btn-primary btn-lg btn-block hide" id="submitItiBtn">
               Plan my trip
             </button>
           </form>
@@ -119,6 +130,10 @@
     </div>
   </div>
 </div>
+<script src="/static/US_states.js"></script>
 <script src="/static/new_iti.js"></script>
+<script async src="https://maps.googleapis.com/maps/api/js?key=&callback=initMap"
+  defer>
+  </script>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 {% endblock %}
