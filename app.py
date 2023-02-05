@@ -30,9 +30,10 @@ errors = {
 }
 
 # Heroku config
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL').replace("://", "ql://", 1) or "postgresql:///user_itinerary"
-# app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get(
-#     'DATABASE_URL', "postgresql:///user_itinerary")
+# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL').replace("://", "ql://", 1) or "postgresql:///user_itinerary"
+# local config
+app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get(
+    'DATABASE_URL', "postgresql:///user_itinerary")
 app.config['API_KEY'] = os.environ.get('API_KEY')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
