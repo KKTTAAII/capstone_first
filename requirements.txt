@@ -105,7 +105,7 @@ pyrsistent==0.18.0
 pyserial==3.4
 python-dateutil==2.8.2
 python-dotenv==0.19.1
-PyYAML==5.3.1
+PyYAML==5.4
 pyzmq==22.3.0
 requests==2.26.0
 requests-unixsocket==0.2.0
