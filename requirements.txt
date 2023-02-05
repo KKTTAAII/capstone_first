@@ -103,7 +103,6 @@ pyOpenSSL==19.0.0
 pyparsing==2.4.7
 pyrsistent==0.18.0
 pyserial==3.4
-python-apt==2.0.1
 python-dateutil==2.8.2
 python-debian===0.1.36ubuntu1
 python-dotenv==0.19.1
