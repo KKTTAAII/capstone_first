@@ -114,7 +114,6 @@ Send2Trash==1.8.0
 service-identity==18.1.0
 simplejson==3.16.0
 six==1.16.0
-sos==4.4
 SQLAlchemy==1.4.26
 SQLAlchemy-Utils==0.37.9
 ssh-import-id==5.10
